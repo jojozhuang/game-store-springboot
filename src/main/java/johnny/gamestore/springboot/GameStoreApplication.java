@@ -16,6 +16,7 @@ public class GameStoreApplication {
 		SpringApplication.run(GameStoreApplication.class, args);
 	}
 
+	/*
 	@Bean
 	CommandLineRunner runner(ProductRepository productRepository) {
 		return args -> {
@@ -36,6 +37,6 @@ public class GameStoreApplication {
 			productRepository.save(product3);
 
 		};
-	}
+	}*/
 
 }
