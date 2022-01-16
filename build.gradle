@@ -23,6 +23,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-devtools'
     implementation 'com.h2database:h2'
     implementation 'org.postgresql:postgresql'
+    implementation 'org.apache.commons:commons-dbcp2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
