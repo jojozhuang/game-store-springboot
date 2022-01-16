@@ -1,0 +1,15 @@
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-request-size: 215MB
+      file-size-threshold: 2KB
+      max-file-size: 200MB
+  profiles:
+    active: dev # change to 'prod' to apply the production configuration
+site:
+  api-url: "http://localhost:8080"
+server:
+  port: 8080
+file:
+  upload-dir: "./public/uploads"
