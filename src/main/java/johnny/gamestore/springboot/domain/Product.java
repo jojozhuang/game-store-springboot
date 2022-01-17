@@ -13,15 +13,15 @@ public class Product {
     private Long id;
     
   //  @NotBlank
-    private String productname;
+    private String productName;
     private double price;
     private String image;
     
     @SuppressWarnings("unused")
     private Product(){}
     
-    public Product(String productname) {
-        this.productname = productname;
+    public Product(String productName) {
+        this.productName = productName;
     }
 
     public Long getId() {
@@ -33,11 +33,11 @@ public class Product {
     }
 
     public String getProductName() {
-        return productname;
+        return productName;
     }
 
     public void setProductName(String productname) {
-        this.productname = productname;
+        this.productName = productName;
     }
 
     public double getPrice() {
@@ -58,7 +58,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product [productname=" + productname + ", price=" + price + "]";
+        return "Product [productName=" + productName + ", price=" + price + "]";
     }
     
 }
