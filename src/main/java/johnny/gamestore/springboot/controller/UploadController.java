@@ -25,12 +25,11 @@ public class UploadController extends BaseController {
     // 3.1.1 Single file upload
     @PostMapping("")
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile uploadfile) {
-
-        ResponseResult rr = new ResponseResult();
-
         if (uploadfile.isEmpty()) {
             return ResponseEntity.ok().body("please select a file!");
         }
+
+        ResponseResult rr = new ResponseResult();
 
         try {
             String[] fileUrls = saveUploadedFiles(Arrays.asList(uploadfile));
@@ -39,7 +38,7 @@ public class UploadController extends BaseController {
             return ResponseEntity.badRequest().build();
         }
 
-        rr.setstatusCode(200);
+        rr.setStatusCode(200);
         return ResponseEntity.ok(rr);
     }
 

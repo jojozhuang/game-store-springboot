@@ -1,64 +1,26 @@
 package johnny.gamestore.springboot.domain;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-//import org.hibernate.validator.constraints.NotBlank;
-
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 @Entity
 public class Product {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-  //  @NotBlank
+
     private String productName;
     private double price;
     private String image;
-    
-    @SuppressWarnings("unused")
-    private Product(){}
-    
-    public Product(String productName) {
-        this.productName = productName;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productname) {
-        this.productName = productName;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    @Override
-    public String toString() {
-        return "Product [productName=" + productName + ", price=" + price + "]";
-    }
-    
 }
