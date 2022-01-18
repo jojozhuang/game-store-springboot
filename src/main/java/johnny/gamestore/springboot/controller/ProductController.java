@@ -3,6 +3,7 @@ package johnny.gamestore.springboot.controller;
 import johnny.gamestore.springboot.domain.Product;
 import johnny.gamestore.springboot.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +43,8 @@ public class ProductController extends BaseController{
     public ResponseEntity<Product> create(@Valid @RequestBody Product product){
         product.setImage(product.getImage().replace(getBaseUrl(), ""));
         Product newProduct = productService.save(product);
-        return ResponseEntity.ok(newProduct);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
     }
 
     // PUT /products/5
