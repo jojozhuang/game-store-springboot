@@ -20,8 +20,7 @@ public class ProductController extends BaseController{
     public Iterable<Product> findAll(){
         List<Product> products = productService.findAll();
         products.forEach(product -> {
-            product.setImage(getApiUrl() + product.getImage());
-            products.add(product);
+            product.setImage(getBaseUrl() + product.getImage());
         });
         Collections.reverse(products);
         return products;
@@ -34,14 +33,14 @@ public class ProductController extends BaseController{
             return ResponseEntity.notFound().build();
         }
         Product product = productService.findById(id);
-        product.setImage(getApiUrl() + product.getImage());
+        product.setImage(getBaseUrl() + product.getImage());
         return ResponseEntity.ok().body(product);
     }
 
     // POST /products
     @PostMapping("")
     public ResponseEntity<Product> create(@Valid @RequestBody Product product){
-        product.setImage(product.getImage().replace(getApiUrl(), ""));
+        product.setImage(product.getImage().replace(getBaseUrl(), ""));
         Product newProduct = productService.save(product);
         return ResponseEntity.ok(newProduct);
     }
@@ -56,7 +55,7 @@ public class ProductController extends BaseController{
         Product oldProduct = productService.findById(id);
         oldProduct.setProductName(product.getProductName());
         oldProduct.setPrice(product.getPrice());
-        oldProduct.setImage(product.getImage().replace(getApiUrl(), ""));
+        oldProduct.setImage(product.getImage().replace(getBaseUrl(), ""));
 
         Product updProduct = productService.save(oldProduct);
         return ResponseEntity.ok(updProduct);

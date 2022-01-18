@@ -15,7 +15,7 @@ public class UrlUtil {
         if(currentRequest.getLocalPort() != 80) {
             baseEnvLinkURL += ":" + currentRequest.getLocalPort();
         }
-        if(!StringUtils.isEmpty(currentRequest.getContextPath())) {
+        if(StringUtils.hasText(currentRequest.getContextPath())) {
             baseEnvLinkURL += currentRequest.getContextPath();
         }
         

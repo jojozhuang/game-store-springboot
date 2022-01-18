@@ -6,4 +6,5 @@ spring:
     hibernate:
       ddl-auto: update
 site:
-  api-url: "https://game-store-springboot.herokuapp.com"
+  urls:
+    base-url: "https://game-store-springboot.herokuapp.com"

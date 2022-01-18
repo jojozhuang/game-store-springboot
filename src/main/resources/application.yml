@@ -22,10 +22,11 @@ spring:
       enabled: true
       path: "/h2"
   profiles:
-    active: dev # change to 'prod' to apply the production configuration
+    active: dev # change to 'prod' to apply the configuration in application-prod.yml
 site:
-  api-url: "http://localhost:8080"
+  urls:
+    base-url: "http://localhost:8080"
+  paths:
+    upload-dir: "./public/uploads"
 server:
   port: 8080
-file:
-  upload-dir: "./public/uploads"
