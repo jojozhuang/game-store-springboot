@@ -13,64 +13,64 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/products")
 public class ProductController extends BaseController{
-    @Autowired
-    ProductService productService;
+  @Autowired
+  ProductService productService;
 
-    // GET /products
-    @GetMapping("")
-    public Iterable<Product> findAll(){
-        List<Product> products = productService.findAll();
-        products.forEach(product -> {
-            product.setImage(getBaseUrl() + product.getImage());
-        });
-        Collections.reverse(products);
-        return products;
-    }
-
-    // GET /products/5
-    @GetMapping("/{id}")
-    public ResponseEntity<Product> findOne(@PathVariable(value = "id") long id) throws Exception {
-        if(!productService.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        Product product = productService.findById(id);
+  // GET /products
+  @GetMapping("")
+  public Iterable<Product> findAll(){
+    List<Product> products = productService.findAll();
+    products.forEach(product -> {
         product.setImage(getBaseUrl() + product.getImage());
-        return ResponseEntity.ok().body(product);
+    });
+    Collections.reverse(products);
+    return products;
+  }
+
+  // GET /products/5
+  @GetMapping("/{id}")
+  public ResponseEntity<Product> findOne(@PathVariable(value = "id") long id) throws Exception {
+    if(!productService.exists(id)) {
+        return ResponseEntity.notFound().build();
+    }
+    Product product = productService.findById(id);
+    product.setImage(getBaseUrl() + product.getImage());
+    return ResponseEntity.ok().body(product);
+  }
+
+  // POST /products
+  @PostMapping("")
+  public ResponseEntity<Product> create(@Valid @RequestBody Product product){
+    product.setImage(product.getImage().replace(getBaseUrl(), ""));
+    Product newProduct = productService.create(product);
+
+    return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
+}
+
+  // PUT /products/5
+  @PutMapping("/{id}")
+  public ResponseEntity<Product> update(@PathVariable(value = "id") Long id,
+                                      @Valid @RequestBody Product product) throws Exception  {
+    if (!productService.exists(id)) {
+        return ResponseEntity.notFound().build();
+    }
+    Product oldProduct = productService.findById(id);
+    oldProduct.setProductName(product.getProductName());
+    oldProduct.setPrice(product.getPrice());
+    oldProduct.setImage(product.getImage().replace(getBaseUrl(), ""));
+
+    Product updProduct = productService.update(oldProduct);
+    return ResponseEntity.ok(updProduct);
+  }
+
+  // DELETE /products/5
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Product> delete(@PathVariable(value = "id") long id) {
+    if(!productService.exists(id)) {
+        return ResponseEntity.notFound().build();
     }
 
-    // POST /products
-    @PostMapping("")
-    public ResponseEntity<Product> create(@Valid @RequestBody Product product){
-        product.setImage(product.getImage().replace(getBaseUrl(), ""));
-        Product newProduct = productService.save(product);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
-    }
-
-    // PUT /products/5
-    @PutMapping("/{id}")
-    public ResponseEntity<Product> update(@PathVariable(value = "id") Long id, 
-                                          @Valid @RequestBody Product product) throws Exception  {
-        if(!productService.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        Product oldProduct = productService.findById(id);
-        oldProduct.setProductName(product.getProductName());
-        oldProduct.setPrice(product.getPrice());
-        oldProduct.setImage(product.getImage().replace(getBaseUrl(), ""));
-
-        Product updProduct = productService.save(oldProduct);
-        return ResponseEntity.ok(updProduct);
-    }
-
-    // DELETE /products/5
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Product> delete(@PathVariable(value = "id") long id) {
-        if(!productService.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-
-        productService.deleteById(id);
-        return ResponseEntity.ok().build();
-    }
+    productService.delete(id);
+    return ResponseEntity.ok().build();
+  }
 }

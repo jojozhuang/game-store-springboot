@@ -27,15 +27,20 @@ public class ProductService {
     return product.get();
   }
 
-  public Product save(Product product) {
+  public Product create(Product product) {
+    product.setId(0L);
     return productRepository.save(product);
   }
 
-  public void deleteById(long id) {
+  public Product update(Product product) {
+    return productRepository.save(product);
+  }
+
+  public void delete(long id) {
     productRepository.deleteById(id);
   }
 
-  public boolean existsById(long id) {
+  public boolean exists(long id) {
     return productRepository.existsById(id);
   }
 }

@@ -49,22 +49,22 @@ class ProductControllerTest extends BaseControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$").isArray())
         .andExpect(jsonPath("$[0].productName").isNotEmpty())
-        .andExpect(jsonPath("$[0].productName").value("Wii"));
+        .andExpect(jsonPath("$[0].productName").value("Xbox 360"));
   }
 
   @Test
   public void testFindOne() throws Exception {
-    when(productService.existsById(1)).thenReturn(true);
+    when(productService.exists(1)).thenReturn(true);
     when(productService.findById(1)).thenReturn(mockProduct1());
 
     mockMvc.perform(get("/api/products/1"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.productName").value("Wii"));
+        .andExpect(jsonPath("$.productName").value("Xbox 360"));
   }
 
   @Test
   public void testCreate() throws Exception {
-    when(productService.save(any())).thenReturn(mockProduct1WithId());
+    when(productService.create(any())).thenReturn(mockProduct1WithId());
 
     mockMvc.perform(post("/api/products")
         .content(asJsonString(mockProduct1()))
@@ -80,9 +80,9 @@ class ProductControllerTest extends BaseControllerTest {
     Product product2 = mockProduct2();
     Product product3 = mockProduct2WithId();
     product3.setId(1L);
-    when(productService.existsById(1)).thenReturn(true);
+    when(productService.exists(1)).thenReturn(true);
     when(productService.findById(1)).thenReturn(product1);
-    when(productService.save(any())).thenReturn(product3);
+    when(productService.update(any())).thenReturn(product3);
 
     mockMvc.perform(put("/api/products/1")
         .content(asJsonString(product2))
@@ -97,7 +97,7 @@ class ProductControllerTest extends BaseControllerTest {
 
   @Test
   public void testDelete() throws Exception {
-    when(productService.existsById(1)).thenReturn(true);
+    when(productService.exists(1)).thenReturn(true);
 
     mockMvc.perform(delete("/api/products/1"))
         .andExpect(status().isOk());
