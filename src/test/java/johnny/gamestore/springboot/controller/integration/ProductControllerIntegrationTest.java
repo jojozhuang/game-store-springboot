@@ -3,19 +3,15 @@ package johnny.gamestore.springboot.controller.integration;
 import johnny.gamestore.springboot.GameStoreApplication;
 import johnny.gamestore.springboot.controller.BaseControllerTest;
 import johnny.gamestore.springboot.domain.Product;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.*;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = GameStoreApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ProductControllerIntegrationTest extends BaseControllerTest {
   @Autowired
@@ -25,8 +21,8 @@ public class ProductControllerIntegrationTest extends BaseControllerTest {
   private int port;
 
   private String getRootUrl() {
-  return "http://localhost:" + port + "/api/products";
- }
+    return "http://localhost:" + port + "/api/products";
+  }
 
   @Test
   public void contextLoads() {

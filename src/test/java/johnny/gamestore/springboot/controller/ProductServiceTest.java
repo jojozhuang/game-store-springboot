@@ -2,17 +2,13 @@ package johnny.gamestore.springboot.controller;
 
 import johnny.gamestore.springboot.domain.Product;
 import johnny.gamestore.springboot.exception.NotFoundException;
-import johnny.gamestore.springboot.property.UrlConfigProperties;
 import johnny.gamestore.springboot.repository.ProductRepository;
 import johnny.gamestore.springboot.service.ProductService;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,17 +17,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {
-  @Autowired
+  @InjectMocks
   ProductService productService;
 
-  @MockBean
+  @Mock
   ProductRepository productRepository;
 
   @Test
-  public void testGetAllProducts() {
+  public void testFindAll() {
     Product mockProduct1 = new Product();
     mockProduct1.setProductName("Wii");
     Product mockProduct2 = new Product();
@@ -47,7 +42,7 @@ public class ProductServiceTest {
   }
 
   @Test
-    public void testGetProductById() throws Exception {
+    public void testFindById() throws Exception {
     Product mockProduct = new Product();
     mockProduct.setProductName("Wii");
 
@@ -59,20 +54,53 @@ public class ProductServiceTest {
   }
 
   @Test
-  public void testGetProductByIdNotFound() {
+  public void testFindByIdNotFound() {
     Optional<Product> mockProduct = Optional.empty();
 
     when(productRepository.findById(1L)).thenReturn(mockProduct);
+
     assertThrows(NotFoundException.class, () -> {
-        Product product = productService.findById(1);
+        productService.findById(1);
     });
     verify(productRepository).findById(1L);
   }
 
   @Test
-  public void testExistsById() {
+  public void testCreate() {
+    Product mockProduct = new Product();
+    mockProduct.setProductName("Wii");
+
+    when(productRepository.save(any())).thenReturn(mockProduct);
+    Product product = productService.create(mockProduct);
+
+    assertThat(product).isEqualTo(mockProduct);
+    verify(productRepository).save(any());
+  }
+
+  @Test
+  public void testUpdate() {
+    Product mockProduct = new Product();
+    mockProduct.setProductName("Wii");
+
+    when(productRepository.save(any())).thenReturn(mockProduct);
+    Product product = productService.update(mockProduct);
+
+    assertThat(product).isEqualTo(mockProduct);
+    verify(productRepository).save(any());
+  }
+
+  @Test
+  public void testDelete() {
+    productService.delete(1L);
+
+    verify(productRepository).deleteById(1L);
+  }
+
+  @Test
+  public void testExists() {
     when(productRepository.existsById(1L)).thenReturn(true);
     boolean exists = productService.exists(1);
+
     assertThat(exists).isEqualTo(true);
     verify(productRepository).existsById(1L);
   }
