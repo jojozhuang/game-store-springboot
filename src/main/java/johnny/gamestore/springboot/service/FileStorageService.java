@@ -1,7 +1,7 @@
 package johnny.gamestore.springboot.service;
 
 import johnny.gamestore.springboot.exception.FileStorageException;
-import johnny.gamestore.springboot.property.FileStorageProperties;
+import johnny.gamestore.springboot.property.PathConfigProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -22,8 +22,8 @@ public class FileStorageService {
     private final Path fileStorageLocation;
 
     @Autowired
-    public FileStorageService(FileStorageProperties fileStorageProperties) {
-        this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir())
+    public FileStorageService(PathConfigProperties pathConfigProperties) {
+        this.fileStorageLocation = Paths.get(pathConfigProperties.getUploadDir())
                 .toAbsolutePath().normalize();
 
         try {

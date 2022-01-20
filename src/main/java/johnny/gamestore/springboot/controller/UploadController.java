@@ -33,7 +33,7 @@ public class UploadController extends BaseController {
 
         try {
             String[] fileUrls = saveUploadedFiles(Arrays.asList(uploadfile));
-            rr.setMessage(getApiUrl() + fileUrls[0]);
+            rr.setMessage(getBaseUrl() + fileUrls[0]);
         } catch (IOException e) {
             return ResponseEntity.badRequest().build();
         }

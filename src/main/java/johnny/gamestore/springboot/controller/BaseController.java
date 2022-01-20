@@ -1,20 +1,22 @@
 package johnny.gamestore.springboot.controller;
 
-import johnny.gamestore.springboot.property.ApiUrlProperties;
+import johnny.gamestore.springboot.property.UrlConfigProperties;
 import johnny.gamestore.springboot.util.UrlUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class BaseController {
     @Autowired
-    private ApiUrlProperties apiUrlProperties;
+    private UrlConfigProperties urlConfigProperties;
 
-    protected String getApiUrl() {
-        String apiUrl = apiUrlProperties.getApiUrl();
-        if (apiUrl == null || apiUrl.isEmpty()) {
-            apiUrl = UrlUtil.getBaseEnvLinkURL();
+    protected String getBaseUrl() {
+        String baseUrl = urlConfigProperties.getBaseUrl();
+        if (!StringUtils.hasText(baseUrl)) {
+            baseUrl = UrlUtil.getBaseEnvLinkURL();
         }
-        return apiUrl;
+
+        return baseUrl;
     }
 }
