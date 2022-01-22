@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.7.0-SNAPSHOT'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'checkstyle'
 }
 
 group = 'johnny.tutorial'
@@ -31,6 +32,17 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.22'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+checkstyle {
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+}
+
+checkstyleMain {
+    source ='src/main/java'
+}
+checkstyleTest {
+    source ='src/test/java'
 }
 
 test {
