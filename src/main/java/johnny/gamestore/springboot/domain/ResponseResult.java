@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ResponseResult {
-    private int statusCode;
-    private String message;
+  private int statusCode;
+  private String message;
 }

@@ -1,5 +1,10 @@
 package johnny.gamestore.springboot.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import johnny.gamestore.springboot.domain.Product;
 import johnny.gamestore.springboot.exception.NotFoundException;
 import johnny.gamestore.springboot.repository.ProductRepository;
@@ -9,13 +14,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.util.List;
 import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {
@@ -60,7 +60,7 @@ public class ProductServiceTest {
     when(productRepository.findById(1L)).thenReturn(mockProduct);
 
     assertThrows(NotFoundException.class, () -> {
-        productService.findById(1);
+      productService.findById(1);
     });
     verify(productRepository).findById(1L);
   }

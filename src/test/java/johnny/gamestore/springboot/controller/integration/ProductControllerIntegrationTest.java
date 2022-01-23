@@ -1,5 +1,6 @@
 package johnny.gamestore.springboot.controller.integration;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import johnny.gamestore.springboot.GameStoreApplication;
 import johnny.gamestore.springboot.controller.BaseControllerTest;
 import johnny.gamestore.springboot.domain.Product;
@@ -8,9 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.*;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 @SpringBootTest(classes = GameStoreApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ProductControllerIntegrationTest extends BaseControllerTest {
@@ -25,9 +25,7 @@ public class ProductControllerIntegrationTest extends BaseControllerTest {
   }
 
   @Test
-  public void contextLoads() {
-
-  }
+  public void contextLoads() {}
 
   @Test
   public void testGetAllProducts() {
@@ -39,7 +37,7 @@ public class ProductControllerIntegrationTest extends BaseControllerTest {
     assertProduct(products[0], mockProduct3());
     assertProduct(products[1], mockProduct2());
     assertProduct(products[2], mockProduct1());
- }
+  }
 
   @Test
   public void testGetProductById() {

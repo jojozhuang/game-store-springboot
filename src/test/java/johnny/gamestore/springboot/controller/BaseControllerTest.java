@@ -1,10 +1,12 @@
 package johnny.gamestore.springboot.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import johnny.gamestore.springboot.domain.Product;
-
 import static org.assertj.core.api.Assertions.assertThat;
+import johnny.gamestore.springboot.domain.Product;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * The base controller for test controller, providing common methods.
+ */
 public class BaseControllerTest {
   protected String asJsonString(final Object obj) {
     try {
