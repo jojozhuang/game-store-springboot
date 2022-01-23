@@ -1,5 +1,13 @@
 package johnny.gamestore.springboot.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import johnny.gamestore.springboot.domain.Product;
 import johnny.gamestore.springboot.property.UrlConfigProperties;
 import johnny.gamestore.springboot.service.ProductService;
@@ -12,14 +20,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
 import java.util.List;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @EnableConfigurationProperties(UrlConfigProperties.class)
 @WebMvcTest(ProductController.class)
@@ -74,13 +75,13 @@ class ProductControllerTest extends BaseControllerTest {
   @Test
   public void testUpdate() throws Exception {
     Product product1 = mockProduct1WithId();
-    Product product2 = mockProduct2();
     Product product3 = mockProduct2WithId();
     product3.setId(1L);
     when(productService.exists(1)).thenReturn(true);
     when(productService.findById(1)).thenReturn(product1);
     when(productService.update(any())).thenReturn(product3);
 
+    Product product2 = mockProduct2();
     mockMvc.perform(put("/api/products/1")
         .content(asJsonString(product2))
         .contentType(MediaType.APPLICATION_JSON)

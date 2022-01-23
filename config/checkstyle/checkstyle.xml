@@ -28,10 +28,10 @@
         <property name="fileNamePattern" value="module\-info\.java$"/>
     </module>
     <!-- https://checkstyle.org/config_filters.html#SuppressionFilter -->
-    <!--<module name="SuppressionFilter">
-        <property name="file" value="./checkstyle-suppressions.xml"/>
+    <module name="SuppressionFilter">
+        <property name="file" value="${config_loc}/checkstyle-suppressions.xml"/>
         <property name="optional" value="false"/>
-    </module>-->
+    </module>
 
     <!-- Checks for whitespace                               -->
     <!-- See http://checkstyle.org/config_whitespace.html -->
@@ -41,16 +41,17 @@
 
     <module name="LineLength">
         <property name="fileExtensions" value="java"/>
-        <property name="max" value="100"/>
+        <property name="max" value="120"/>
         <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
     </module>
 
     <module name="SuppressWarningsFilter"/>
 
+    <!--
     <module name="RegexpHeader">
         <property name="header"
-                  value="^/\*\*$\n^ \* Copyright \(c\) \d\d\d\d Ariba, Inc\.$\n^ \* All rights reserved\. Patents pending\.$\n^ \*/$"/>
-    </module>
+                  value="^/\*\*$\n^ \* Copyright \(c\) \d\d\d\d Johnny, Inc\.$\n^ \* All rights reserved\. Patents pending\.$\n^ \*/$"/>
+    </module>-->
 
     <module name="RegexpMultiline">
         <property name="message" value="Blank line at start of block should be removed" />
@@ -344,7 +345,7 @@
             <!-- checks for magic numbers which are not constants -->
             <property name="ignoreFieldDeclaration" value="true"/>
             <property name="ignoreHashCodeMethod" value="true"/>
-            <property name="ignoreNumbers" value="-1,0,1,100"/>
+           <property name="ignoreNumbers" value="-1,0,1,100"/>
         </module>
 
         <module name="SuppressWarningsHolder"/>
