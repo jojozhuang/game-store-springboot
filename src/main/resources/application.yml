@@ -23,6 +23,9 @@ spring:
       path: "/h2"
   profiles:
     active: dev # change to 'prod' to apply the configuration in application-prod.yml
+springdoc:
+  api-docs:
+    path: /gs-docs
 site:
   urls:
     base-url: "http://localhost:8080"
