@@ -1,5 +1,11 @@
 package johnny.gamestore.springboot.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import johnny.gamestore.springboot.domain.Product;
 import johnny.gamestore.springboot.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +30,10 @@ public class ProductController extends BaseController {
   ProductService productService;
 
   // GET /products
+  @Operation(summary = "Find Contacts by name", description = "Name search by %name% format", tags = { "Products" })
+  @ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "successful operation",
+      content = @Content(array = @ArraySchema(schema = @Schema(implementation = Product.class)))) })
   @GetMapping("")
   public Iterable<Product> findAll() {
     List<Product> products = productService.findAll();
