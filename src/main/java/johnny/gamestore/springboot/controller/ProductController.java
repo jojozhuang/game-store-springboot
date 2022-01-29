@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,11 +31,12 @@ public class ProductController extends BaseController {
   ProductService productService;
 
   // GET /products
-  @Operation(summary = "Get all products", description = "Get all products sorted by id", tags = { "Products" })
+  @Operation(summary = "Get all products", description = "Get all products sorted by id",
+      tags = { "Product Controller" })
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "successful operation",
+      @ApiResponse(responseCode = "200", description = "Successful retrieved products",
         content = @Content(array = @ArraySchema(schema = @Schema(implementation = Product.class)))) })
-  @GetMapping("")
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public Iterable<Product> findAll() {
     List<Product> products = productService.findAll();
     products.forEach(product -> {
@@ -45,11 +47,11 @@ public class ProductController extends BaseController {
   }
 
   // GET /products/5
-  @Operation(summary = "Get one product", description = "Get one product by id", tags = { "Products" })
+  @Operation(summary = "Get one product", description = "Get one product by id", tags = { "Product Controller" })
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Get one product by id",
-        content = {@Content(mediaType = "application/json")}),
-      @ApiResponse(responseCode = "400", description = "Bad request",
+      @ApiResponse(responseCode = "200", description = "Successful retrieved one product by id",
+        content = {@Content(schema = @Schema(implementation = Product.class))}),
+      @ApiResponse(responseCode = "404", description = "Product is not found with the given id",
         content = @Content)})
   @GetMapping("/{id}")
   public ResponseEntity<Product> findOne(@PathVariable(value = "id") long id) throws Exception {
@@ -62,10 +64,10 @@ public class ProductController extends BaseController {
   }
 
   // POST /products
-  @Operation(summary = "Create new product", description = "Create new product", tags = { "Products" })
+  @Operation(summary = "Create new product", description = "Create new product", tags = { "Product Controller" })
   @ApiResponses(value = {
       @ApiResponse(responseCode = "201", description = "Created one new product",
-        content = {@Content(mediaType = "application/json")}) })
+        content = {@Content(schema = @Schema(implementation = Product.class))})})
   @PostMapping("")
   public ResponseEntity<Product> create(@Valid @RequestBody Product product) {
     product.setImage(product.getImage().replace(getBaseUrl(), ""));
@@ -75,11 +77,11 @@ public class ProductController extends BaseController {
   }
 
   // PUT /products/5
-  @Operation(summary = "Update one product", description = "Update one product", tags = { "Products" })
+  @Operation(summary = "Update one product", description = "Update one product", tags = { "Product Controller" })
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Update one product by id",
-        content = {@Content(mediaType = "application/json")}),
-      @ApiResponse(responseCode = "404", description = "Product with the given id is not found",
+        content = {@Content(schema = @Schema(implementation = Product.class))}),
+      @ApiResponse(responseCode = "404", description = "Product is not found with the given id",
         content = @Content)})
   @PutMapping("/{id}")
   public ResponseEntity<Product> update(@PathVariable(value = "id") Long id,
@@ -98,11 +100,11 @@ public class ProductController extends BaseController {
 
   // DELETE /products/5
   @DeleteMapping("/{id}")
-  @Operation(summary = "Delete one product", description = "Delete one product by id", tags = { "Products" })
+  @Operation(summary = "Delete one product", description = "Delete one product by id", tags = { "Product Controller" })
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Product is deleted",
-        content = {@Content(mediaType = "application/json")}),
-      @ApiResponse(responseCode = "404", description = "Product with the given id is not found",
+      @ApiResponse(responseCode = "200", description = "Successfully deleted product",
+        content = {@Content(schema = @Schema(implementation = Product.class))}),
+      @ApiResponse(responseCode = "404", description = "Product is not found with the given id",
         content = @Content)})
   public ResponseEntity<Product> delete(@PathVariable(value = "id") long id) {
     if (!productService.exists(id)) {
