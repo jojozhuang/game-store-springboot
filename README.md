@@ -71,3 +71,12 @@ Read portfolio [Game Store(Angular)](https://jojozhuang.github.io/project/game-s
 
 # Tutorial
 Read tutorial [Building RESTful API with Spring Boot](https://jojozhuang.github.io/tutorial/building-restful-api-with-spring-boot) to learn how this RESTful API is built.
+
+# Run sonarqube locally
+```shell
+./gradlew build sonarqube --info
+```
+- Run with `--stacktrace` option to get the stack trace.
+- Run with `--debug` option to get more log output.
+- Run with `--scan` to get full insights.
+
