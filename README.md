@@ -66,6 +66,172 @@ The available RESTful API on Heroku is
 
 For example, request https://game-store-springboot.herokuapp.com/api/products to get all products.
 
+# Deploy to CF
+
+## Create App on CF
+Build
+```shell
+./gradlew build
+```
+Create manifest.yml, deploy with jre 11.
+```yaml
+applications:
+  - name: game-store-springboot
+    memory: 800MB
+    path: build/libs/game-store-springboot-0.0.1-SNAPSHOT.jar
+    buildpacks:
+      - https://github.com/cloudfoundry/java-buildpack.git
+    env:
+      # see https://github.tools.sap/cloud-curriculum/materials/blob/main/cloud-platforms/cloud-foundry/java-memory-allocation.md
+      JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+}, memory_calculator: { stack_threads: 200 }}'
+      MALLOC_ARENA_MAX: 4
+```
+Push to cf with random route.
+```shell
+cf push --random-route
+```
+
+## Add Database Service Dependency
+Create postgresql database service on cf.
+```shell
+cf create-service postgresql-db trial game-store-db
+```
+Check cf service.
+```shell
+cf services
+```
+Update manifest.yml by adding database service.
+```yaml
+applications:
+  - name: game-store-springboot
+    memory: 800MB
+    path: build/libs/game-store-springboot-0.0.1-SNAPSHOT.jar
+    buildpacks:
+      - https://github.com/cloudfoundry/java-buildpack.git
+    env:
+      # see https://github.tools.sap/cloud-curriculum/materials/blob/main/cloud-platforms/cloud-foundry/java-memory-allocation.md
+      JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+}, memory_calculator: { stack_threads: 200 }}'
+      MALLOC_ARENA_MAX: 4
+    services:
+      - game-store-db
+```
+Push to cf.
+```shell
+cf push
+```
+Bind service
+```shell
+cf bind-service game-store-springboot game-store-db
+```
+Ensure your env variable changes take effect.
+```shell
+cf restage game-store-springboot
+```
+
+## Add Logging(not implemented)
+
+https://github.com/SAP/cf-java-logging-support
+
+Use `cf-java-logging-support` to enhance log messages with metadata extracted from HTTP headers of incoming requests.
+```xml
+    <properties>
+        <cf-logging-version>3.3.0</cf-logging-version>
+    </properties>
+```
+
+```xml
+    <dependency>
+        <groupId>com.sap.hcp.cf.logging</groupId>
+        <artifactId>cf-java-logging-support-logback</artifactId>
+        <version>${cf-logging-version}</version>
+    </dependency>
+```
+
+Forward the Correlation ID obtained from `LogContext.getCorrelationId()` in your restTemplate for outgoing requests.
+```java
+@Bean
+public RestTemplate restTemplate() {
+    RestTemplate restTemplate = new RestTemplate();
+    restTemplate.getInterceptors().add((request, body, execution) -> {
+      request.getHeaders().set(HttpHeaders.CORRELATION_ID.getName(), LogContext.getCorrelationId());
+      return execution.execute(request, body);
+    });
+    return restTemplate;
+}
+```
+
+Test locally. Trigger any api, you should see the `correlation_id` attribute in the log.
+```json
+"correlation_id":"8720dd36-bc3b-40ce-8783-dbacbad23da1"
+```
+This id is from the `X-CorrelationID` attribute of the http request header. You can find it in postman.
+
+Push to cf, Build.
+```shell
+mvn package
+```
+Push to cf.
+```shell
+cf push
+```
+Create an instance of the `application-logs` service with the name `app-logs`.
+```shell
+cf create-service application-logs lite app-logs
+```
+Bind the logging service to app `bulletinboard-ads`.
+```shell
+cf bind-service bulletinboard-ads app-logs
+```
+Ensure your env variable changes take effect.
+```shell
+cf restage bulletinboard-ads
+```
+Test
+Call api in postman. Note down the value of `x-correlationid` or `vcap_request_id` in header, eg. "6aa0528c-b1c6-4de1-4c6a-3c6af618b4ff".
+```shell
+curl --location --request GET 'https://game-store-springboot-chatty-vicuna-nj.cfapps.us10.hana.ondemand.com/api/products'
+```
+Then open https://logs.cf.us10.hana.ondemand.com in your browser. You may need to sign in, but afterwards you should be seeing a Kibana dashboard.
+
+You should see `correlation_id` in the latest log. And its value is "6aa0528c-b1c6-4de1-4c6a-3c6af618b4ff".
+
+## Test
+
+```shell
+curl --location --request GET 'https://game-store-springboot-chatty-vicuna-nj.cfapps.us10.hana.ondemand.com/api/products'
+```
+
+## Troubleshooting
+Inspect the environment of your app.
+```shell
+cf env game-store-springboot
+```
+Check the logs.
+```shell
+cf logs game-store-springboot --recent
+```
+
+## Delete
+Remove binding
+```shell
+cf unbind-service  game-store-springboot  game-store-db
+```
+Delete service
+```shell
+cf delete-service  game-store-db
+```
+Recreate database service
+```shell
+cf create-service postgresql-db trial game-store-db
+```
+```shell
+cf bind-service game-store-springboot game-store-db
+```
+Restage app
+```shell
+cf restage game-store-springboot
+```
+
 # Portfolio
 Read portfolio [Game Store(Angular)](https://jojozhuang.github.io/project/game-store-angular) or [Game Store(React)](http://jojozhuang.github.io/project/game-store-react) to learn how these RESTful APIs are consumed by Angular and React applications.
 
