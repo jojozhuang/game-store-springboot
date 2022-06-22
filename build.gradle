@@ -60,6 +60,6 @@ test {
 
     filter {
         // exclude all tests containing the `integration` file path or package.
-        //excludeTestsMatching "*.integration.*"
+        excludeTestsMatching "*.integration.*"
     }
 }
