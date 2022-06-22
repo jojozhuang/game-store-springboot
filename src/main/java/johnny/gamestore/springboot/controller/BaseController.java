@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
  * The base controller for RESTful controller, providing basic methods.
  */
 @RestController
-public class BaseController {
+public abstract class BaseController {
   @Autowired
   private UrlConfigProperties urlConfigProperties;
 
