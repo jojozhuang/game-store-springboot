@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
@@ -44,6 +46,19 @@ class ProductControllerTest extends BaseControllerTest {
     when(productService.findAll()).thenReturn(List.of(mockProduct1()));
 
     mockMvc.perform(get("/api/products"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$").isArray())
+        .andExpect(jsonPath("$[0].productName").isNotEmpty())
+        .andExpect(jsonPath("$[0].productName").value("Xbox 360"));
+  }
+
+  @Test
+  public void testFindAllPagination() throws Exception {
+    Page page = new PageImpl(List.of(mockProduct1()));
+    when(productService.findAllByPrice(any()))
+        .thenReturn(page);
+
+    mockMvc.perform(get("/api/products/all?page=0&size=5&sortby=id"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$").isArray())
         .andExpect(jsonPath("$[0].productName").isNotEmpty())

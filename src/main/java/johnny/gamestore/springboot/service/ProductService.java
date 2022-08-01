@@ -4,6 +4,9 @@ import johnny.gamestore.springboot.domain.Product;
 import johnny.gamestore.springboot.exception.NotFoundException;
 import johnny.gamestore.springboot.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -41,5 +44,16 @@ public class ProductService {
 
   public boolean exists(long id) {
     return productRepository.existsById(id);
+  }
+
+  public Page<Product> findAllByPrice(ProductRequest productRequest) {
+    return productRepository.findAllByPrice(
+        productRequest.getPrice(),
+        PageRequest.of(productRequest.getPage(), productRequest.getSize(),
+            sortByProductIdDesc(productRequest.getSortBy())));
+  }
+
+  private Sort sortByProductIdDesc(String sortBy) {
+    return Sort.by(sortBy).descending();
   }
 }
