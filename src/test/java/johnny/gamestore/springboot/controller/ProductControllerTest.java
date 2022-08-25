@@ -66,6 +66,24 @@ class ProductControllerTest extends BaseControllerTest {
   }
 
   @Test
+  public void testFindAllCustomPagination() throws Exception {
+    Page page = new PageImpl(List.of(mockProduct2WithId(), mockProduct2WithId(), mockProduct2WithId()));
+    when(productService.findAllByPrice(any()))
+        .thenReturn(page);
+
+    mockMvc.perform(get("/api/products/all-custom?page=0&size=1&sortby=id"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$").isNotEmpty())
+        .andExpect(jsonPath("$.data").isNotEmpty())
+        .andExpect(jsonPath("$.data[0].productName").isNotEmpty())
+        .andExpect(jsonPath("$.data[0].productName").value("Wii"))
+        .andExpect(jsonPath("$.pagination").isNotEmpty())
+        .andExpect(jsonPath("$.pagination.previous").isEmpty())
+        .andExpect(jsonPath("$.pagination.next").isNotEmpty())
+        .andExpect(jsonPath("$.pagination.totalCount").value("1"));
+  }
+
+  @Test
   public void testFindOne() throws Exception {
     when(productService.exists(1)).thenReturn(true);
     when(productService.findById(1)).thenReturn(mockProduct1());
