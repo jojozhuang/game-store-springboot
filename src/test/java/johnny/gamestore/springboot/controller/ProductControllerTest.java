@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import johnny.gamestore.springboot.domain.Product;
 import johnny.gamestore.springboot.property.UrlConfigProperties;
+import johnny.gamestore.springboot.service.ProductRequest;
 import johnny.gamestore.springboot.service.ProductService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +21,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
@@ -55,8 +58,7 @@ class ProductControllerTest extends BaseControllerTest {
   @Test
   public void testFindAllPagination() throws Exception {
     Page page = new PageImpl(List.of(mockProduct1()));
-    when(productService.findAllByPrice(any()))
-        .thenReturn(page);
+    when(productService.findAllByPrice(any())).thenReturn(page);
 
     mockMvc.perform(get("/api/products/all?page=0&size=5&sortby=id"))
         .andExpect(status().isOk())
@@ -67,9 +69,10 @@ class ProductControllerTest extends BaseControllerTest {
 
   @Test
   public void testFindAllCustomPagination() throws Exception {
-    Page page = new PageImpl(List.of(mockProduct2WithId(), mockProduct2WithId(), mockProduct2WithId()));
-    when(productService.findAllByPrice(any()))
-        .thenReturn(page);
+    Pageable pageable = PageRequest.of(0, 1);
+    List<Product> products = List.of(mockProduct2WithId(), mockProduct2WithId(), mockProduct2WithId());
+    Page page = new PageImpl(products, pageable, 3);
+    when(productService.findAllByPrice(any())).thenReturn(page);
 
     mockMvc.perform(get("/api/products/all-custom?page=0&size=1&sortby=id"))
         .andExpect(status().isOk())
@@ -80,7 +83,7 @@ class ProductControllerTest extends BaseControllerTest {
         .andExpect(jsonPath("$.pagination").isNotEmpty())
         .andExpect(jsonPath("$.pagination.previous").isEmpty())
         .andExpect(jsonPath("$.pagination.next").isNotEmpty())
-        .andExpect(jsonPath("$.pagination.totalCount").value("1"));
+        .andExpect(jsonPath("$.pagination.totalCount").value("3"));
   }
 
   @Test
