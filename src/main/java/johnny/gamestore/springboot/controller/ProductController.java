@@ -1,6 +1,10 @@
 package johnny.gamestore.springboot.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import johnny.gamestore.springboot.domain.Product;
+import johnny.gamestore.springboot.paging.PagedResource;
+import johnny.gamestore.springboot.property.UrlConfigProperties;
 import johnny.gamestore.springboot.service.ProductRequest;
 import johnny.gamestore.springboot.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,6 +15,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.web.HateoasPageableHandlerMethodArgumentResolver;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +38,8 @@ import javax.validation.Valid;
 @RequestMapping("/api/products")
 public class ProductController extends BaseController {
   @Autowired
+  private UrlConfigProperties urlConfigProperties;
+  @Autowired
   ProductService productService;
 
   // GET /products
@@ -49,13 +58,13 @@ public class ProductController extends BaseController {
     return products;
   }
 
-  @Operation(summary = "Get all products by price", description = "Get all products by price sorted by id",
+  @Operation(summary = "Get all products in pagination", description = "Get all products in pagination",
       tags = { "Product Controller" })
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Successful retrieved products",
           content = @Content(array = @ArraySchema(schema = @Schema(implementation = Product.class)))) })
   @GetMapping(value = "all", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Iterable<Product> findAllByPrice(
+  public Iterable<Product> findAllPagination(
       @RequestParam(value = "price", required = false, defaultValue = "269") String price,
       @RequestParam(value = "page", required = false, defaultValue = "0") int page,
       @RequestParam(value = "size", required = false, defaultValue = "3") int size,
@@ -69,6 +78,37 @@ public class ProductController extends BaseController {
             .build());
 
     return result.getContent();
+  }
+
+  @Operation(summary = "Get all products in custom pagination", description = "Get all products in custom pagination",
+      tags = { "Product Controller" })
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Successful retrieved products",
+          content = @Content(array = @ArraySchema(schema = @Schema(implementation = Product.class)))) })
+  @GetMapping(value = "all-custom", produces = MediaType.APPLICATION_JSON_VALUE)
+  public PagedResource<Product> findAllCustomPagination(
+      @RequestParam(value = "price", required = false, defaultValue = "269") String price,
+      @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+      @RequestParam(value = "size", required = false, defaultValue = "3") int size,
+      @RequestParam(value = "sortby", required = false, defaultValue = "id") String sortBy) {
+    Page<Product> result = productService
+        .findAllByPrice(ProductRequest.builder()
+            .price(Double.parseDouble(price))
+            .page(page)
+            .size(size)
+            .sortBy(sortBy)
+            .build());
+
+    PagedResourcesAssembler<Product> productPagedResourcesAssembler =
+        new PagedResourcesAssembler<>(new HateoasPageableHandlerMethodArgumentResolver(), null);
+
+    WebMvcLinkBuilder linkBuilder = linkTo(methodOn(this.getClass())
+        .findAllCustomPagination(price, page, size, sortBy));
+
+    return new PagedResource<>(productPagedResourcesAssembler,
+        linkBuilder,
+        result,
+        urlConfigProperties.getBaseUrl());
   }
 
   // GET /products/5
