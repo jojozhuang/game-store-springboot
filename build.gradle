@@ -41,6 +41,7 @@ dependencies {
 bootRun {
     mainClass = 'johnny.gamestore.springboot.GameStoreApplication'
     jvmArgs = ["-XX:MaxMetaspaceSize=480m"]
+    environment = ["DATABASE_URL": "postgres://postgres:pw@localhost:5432/postgres" ]
     systemProperty "server.port", "8080"
     systemProperty "spring.profiles.active", "local"
 }
