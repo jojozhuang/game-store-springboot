@@ -7,7 +7,7 @@ spring:
       max-file-size: 200MB
   profiles:
     group:
-      local: postgresql # possible values: h2, postgresql, gensql
+      local: h2 # possible values: h2, postgresql, gensql
       prod: prod
 springdoc:
   api-docs:
