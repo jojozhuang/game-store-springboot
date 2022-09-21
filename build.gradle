@@ -28,6 +28,7 @@ dependencies {
     implementation 'org.apache.commons:commons-dbcp2'
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.4'
     implementation "org.springframework.boot:spring-boot-starter-hateoas"
+    implementation "org.flywaydb:flyway-core"
 
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
@@ -35,6 +36,13 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.22'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+bootRun {
+    mainClass = 'johnny.gamestore.springboot.GameStoreApplication'
+    jvmArgs = ["-XX:MaxMetaspaceSize=480m"]
+    systemProperty "server.port", "8080"
+    systemProperty "spring.profiles.active", "local"
 }
 
 checkstyle {

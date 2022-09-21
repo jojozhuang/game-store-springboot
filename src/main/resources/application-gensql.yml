@@ -1,0 +1,8 @@
+spring.jpa.properties:
+  hibernate:
+    hbm2ddl.delimiter: ";"
+    format_sql: true
+  javax.persistence.schema-generation:
+    create-source: metadata
+    scripts.action: create
+    scripts.create-target: ddl.sql
