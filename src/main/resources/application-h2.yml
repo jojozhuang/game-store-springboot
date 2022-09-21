@@ -1,0 +1,23 @@
+spring:
+  flyway:
+    enabled: true
+    locations: classpath:sql/h2-migration
+    table: SCHEMA_VERSION
+    validate-on-migrate: false
+  datasource:
+    url: jdbc:h2:mem:gamestore
+    username: sa
+    password: abc123
+    driverClassName: org.h2.Driver
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: 'false'
+    hibernate:
+      ddl-auto: none
+  h2:
+    console:
+      enabled: true
+      path: "/h2"
