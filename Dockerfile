@@ -13,8 +13,9 @@ RUN ./gradlew build -x check --stacktrace
 
 # Stage 2, based on openjdk 11, to have only the compiled app, ready for production
 
-FROM sapmachine:11.0.17
+#FROM sapmachine:11.0.17
 
 ## From ‘builder’ stage copy over jar file
-COPY --from=builder /spring-boot-app/build/libs/game-store-springboot-0.0.1-SNAPSHOT.jar game-store-springboot-0.0.1-SNAPSHOT.jar
-ENTRYPOINT ["java","-Dspring.profiles.active=prod","-jar","/game-store-springboot-0.0.1-SNAPSHOT.jar"]
+#COPY --from=builder /spring-boot-app/build/libs/game-store-springboot-0.0.1-SNAPSHOT.jar game-store-springboot-0.0.1-SNAPSHOT.jar
+#ENTRYPOINT ["java","-Dspring.profiles.active=prod","-jar","/game-store-springboot-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-Dspring.profiles.active=prod","-jar","/spring-boot-app/build/libs/game-store-springboot-0.0.1-SNAPSHOT.jar"]
