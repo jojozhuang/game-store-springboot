@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 import javax.validation.Valid;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/products")
 public class ProductController extends BaseController {
@@ -41,7 +43,12 @@ public class ProductController extends BaseController {
         content = @Content(array = @ArraySchema(schema = @Schema(implementation = Product.class)))) })
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public Iterable<Product> findAll() {
-    logger.info("Method {} of ProductController gets called.", "findAll()");
+    //logger.info("Method {} of ProductController gets called.", "findAll()");
+    logger.trace("A TRACE Message");
+    logger.debug("A DEBUG Message");
+    logger.info("An INFO Message");
+    logger.warn("A WARN Message");
+    logger.error("An ERROR Message");
     List<Product> products = productService.findAll();
     products.forEach(product -> {
       product.setImage(getBaseUrl() + product.getImage());
