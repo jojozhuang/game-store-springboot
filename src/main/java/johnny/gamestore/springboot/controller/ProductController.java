@@ -13,6 +13,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.HateoasPageableHandlerMethodArgumentResolver;
@@ -34,9 +37,11 @@ import java.util.Collections;
 import java.util.List;
 import javax.validation.Valid;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/products")
 public class ProductController extends BaseController {
+  Logger logger = LoggerFactory.getLogger(ProductController.class);
   @Autowired
   private UrlConfigProperties urlConfigProperties;
   @Autowired
@@ -50,6 +55,12 @@ public class ProductController extends BaseController {
         content = @Content(array = @ArraySchema(schema = @Schema(implementation = Product.class)))) })
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public Iterable<Product> findAll() {
+    //logger.info("Method {} of ProductController gets called.", "findAll()");
+    logger.trace("A TRACE Message");
+    logger.debug("A DEBUG Message");
+    logger.info("An INFO Message");
+    logger.warn("A WARN Message");
+    logger.error("An ERROR Message");
     List<Product> products = productService.findAll();
     products.forEach(product -> {
       product.setImage(getBaseUrl() + product.getImage());
@@ -120,10 +131,13 @@ public class ProductController extends BaseController {
         content = @Content)})
   @GetMapping("/{id}")
   public ResponseEntity<Product> findOne(@PathVariable(value = "id") long id) throws Exception {
+    logger.info("ID of the requested product: {}", id);
     if (!productService.exists(id)) {
+      logger.warn("Product with ID {} doesn't exist!", id);
       return ResponseEntity.notFound().build();
     }
     Product product = productService.findById(id);
+    logger.debug("Product is found: {}", product);
     product.setImage(getBaseUrl() + product.getImage());
     return ResponseEntity.ok().body(product);
   }
@@ -137,7 +151,7 @@ public class ProductController extends BaseController {
   public ResponseEntity<Product> create(@Valid @RequestBody Product product) {
     product.setImage(product.getImage().replace(getBaseUrl(), ""));
     Product newProduct = productService.create(product);
-
+    logger.debug("New product has been created: {}", newProduct);
     return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
   }
 
@@ -151,15 +165,19 @@ public class ProductController extends BaseController {
   @PutMapping("/{id}")
   public ResponseEntity<Product> update(@PathVariable(value = "id") Long id,
                                         @Valid @RequestBody Product product) throws Exception {
+    logger.info("ID of the product to be updated: {}", id);
     if (!productService.exists(id)) {
+      logger.warn("Product with ID {} doesn't exist for update!", id);
       return ResponseEntity.notFound().build();
     }
     Product oldProduct = productService.findById(id);
+    logger.debug("Product before update: {}", oldProduct);
     oldProduct.setProductName(product.getProductName());
     oldProduct.setPrice(product.getPrice());
     oldProduct.setImage(product.getImage().replace(getBaseUrl(), ""));
 
     Product updProduct = productService.update(oldProduct);
+    logger.debug("Product after update: {}", updProduct);
     return ResponseEntity.ok(updProduct);
   }
 
@@ -172,11 +190,14 @@ public class ProductController extends BaseController {
       @ApiResponse(responseCode = "404", description = "Product is not found with the given id",
         content = @Content)})
   public ResponseEntity<Product> delete(@PathVariable(value = "id") long id) {
+    logger.info("ID of the product to be deleted: {}", id);
     if (!productService.exists(id)) {
+      logger.warn("Product with ID {} doesn't exist for deletion!", id);
       return ResponseEntity.notFound().build();
     }
 
     productService.delete(id);
+    logger.debug("Product with id {} has been deleted.", id);
     return ResponseEntity.ok().build();
   }
 }
