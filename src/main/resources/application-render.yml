@@ -1,0 +1,12 @@
+spring:
+  flyway:
+    enabled: false
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+site:
+  urls:
+    base-url: "https://game-store-springboot.onrender.com"
