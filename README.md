@@ -15,7 +15,7 @@ POST /api/upload          | Upload an image     | POST [http://localhost:8080/ap
 
 # Setup Locally
 ```bash
-git clone https://github.com/jojozhuang/restful-api-springboot.git
+git clone https://github.com/jojozhuang/game-store-springboot.git
 ```
 Build and bootRun.
 
@@ -54,6 +54,19 @@ mvn package
 Then, launch the application with `java -jar` and append `--spring.profiles.active=prod`.
 ```shell
 java -jar target/restful-spring-boot-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
+```
+
+## Postgresql Database
+
+Start Postgresql in docker.
+
+```sh
+docker run --name game-store-postgresql \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=pw \
+  -e POSTGRES_DB=game-store \
+  -p 5432:5432 \
+  -d postgres
 ```
 
 # Deploy to Heroku
