@@ -22,7 +22,7 @@ public class DataSourceConfig {
     if ("localhost".equalsIgnoreCase(dbUri.getHost())) {
       dbUrl += "?sslmode=disable";
     } else {
-      dbUrl += "?sslmode=require";
+      dbUrl += "?sslmode=disable";
     }
     String username = dbUri.getUserInfo().split(":")[0];
     String password = dbUri.getUserInfo().split(":")[1];
