@@ -9,10 +9,11 @@ import java.net.URISyntaxException;
 
 @Configuration
 public class DataSourceConfig {
-  @Profile("prod")
+  @Profile({"prod", "render"})
   @Bean
   public BasicDataSource dataSource() throws URISyntaxException {
     String databaseUrl = System.getenv("DATABASE_URL");
+    System.out.println("DATABASE_URL:" + databaseUrl);
     // DATABASE_URL sample: postgres://<username>:<password>@<host>:<port>/<dbname>
     URI dbUri = new URI(databaseUrl);
 

@@ -1,21 +1,12 @@
 spring:
   flyway:
-    schemas: gamestore
-    enabled: true
-    locations: classpath:sql/postgresql-migration
-    table: SCHEMA_VERSION
-    validate-on-migrate: false
-  datasource:
-    url: jdbc:postgresql://i90-xy.h.filess.io:5434/gamestorepostgresql_militarymy?sslmode=disable
-    username: gamestorepostgresql_militarymy
-    password: 5b72892690897f1fba9c6d0d369370e854d932dd
-    driverClassName: org.postgresql.Driver
+    enabled: false
   jpa:
-    show-sql: true
     properties:
       hibernate:
-        default_schema: gamestore
-        dialect: org.hibernate.dialect.PostgreSQL94Dialect
-    defer-datasource-initialization: 'false'
+        dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
+site:
+  urls:
+    base-url: "https://game-store-angular.onrender.com/"
