@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collections;
 
 @Configuration
 public class DataSourceConfig {
@@ -32,6 +33,8 @@ public class DataSourceConfig {
     basicDataSource.setUsername(username);
     basicDataSource.setPassword(password);
 
+    // Set default schema to 'gamestore' for all connections
+    basicDataSource.setConnectionInitSqls(Collections.singletonList("SET search_path TO gamestore"));
     return basicDataSource;
   }
 }
