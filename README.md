@@ -77,7 +77,26 @@ Add `Config Vars` to enable production mode in heroku. Go to https://dashboard.h
 The available RESTful API on Heroku is
 * baseURL: https://game-store-springboot.herokuapp.com/
 
-For example, request https://game-store-springboot.herokuapp.com/api/products to get all products.
+For example, API https://game-store-springboot.herokuapp.com/api/products returns all products.
+
+# Deploy to Render
+
+Create configuration file `application-render.yml` for render deployment. Add `render` profile group in `application.yml`.
+
+Create `Dockerfile` with `sapmachine` image, set `render` in `ENTRYPOINT`.
+
+Log into https://dashboard.render.com/ and find the service `game-store-springboot`, or directly go to https://dashboard.render.com/web/srv-cf26g9qrrk0bppao97t0.
+
+Go to `Settings` to edit configurations.
+
+The available RESTful API on Render is
+* baseURL: https://game-store-springboot.onrender.com
+
+For example, API https://game-store-springboot.onrender.com/api/products returns all products.
+
+UI Apps:
+- https://game-store-angular.onrender.com/products
+- https://game-store-angular.netlify.app/products
 
 # Deploy to CF
 

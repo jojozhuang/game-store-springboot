@@ -1,7 +1,7 @@
 # Compile and run spring boot application in docker
 # Build image: docker build -t game-store-springboot .
-# Run container: docker run --name game-store-springboot -e DATABASE_URL='postgres://game_store_postgresql_user:kUaWp4S4GojSpsNUFtBGN7SAHywj8Izb@dpg-cf23rkirrk0bppaej6gg-a.oregon-postgres.render.com:5432/game_store_postgresql' -p 8080:8080 -d game-store-springboot
-FROM sapmachine:11.0.17 as builder
+# Run container: docker run --name game-store-springboot -e DATABASE_URL='postgresql://gamestorepostgresql_militarymy:5b72892690897f1fba9c6d0d369370e854d932dd@i90-xy.h.filess.io:5434/gamestorepostgresql_militarymy' -p 8080:8080 -d game-store-springboot
+FROM sapmachine:17.0.16 as builder
 
 WORKDIR /spring-boot-app
 
