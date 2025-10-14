@@ -8,7 +8,8 @@ spring:
   profiles:
     group:
       local: h2 # possible values: h2, postgresql, gensql
-      prod: render # possible values: prod, render
+      prod: prod # possible values: prod
+      render: render # possible values: render
 springdoc:
   api-docs:
     path: /gs-docs

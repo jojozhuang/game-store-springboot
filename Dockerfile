@@ -20,4 +20,4 @@ RUN ./gradlew build -x check --stacktrace
 #ENTRYPOINT ["java","-Dspring.profiles.active=prod","-jar","/game-store-springboot-0.0.1-SNAPSHOT.jar"]
 
 # It seems multistage docker file doesn't work, so have to define docker file with single stage
-ENTRYPOINT ["java","-Dspring.profiles.active=prod","-jar","/spring-boot-app/build/libs/game-store-springboot-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-Dspring.profiles.active=render","-jar","/spring-boot-app/build/libs/game-store-springboot-0.0.1-SNAPSHOT.jar"]

@@ -9,4 +9,4 @@ spring:
       ddl-auto: update
 site:
   urls:
-    base-url: "https://game-store-angular.onrender.com/"
+    base-url: "https://game-store-springboot.onrender.com"

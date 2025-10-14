@@ -163,3 +163,5 @@ gradle-app.setting
 uploads/
 
 h2/
+
+bin/
