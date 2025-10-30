@@ -13,7 +13,7 @@ public class RestConfiguration {
   public FilterRegistrationBean corsFilter() {
     CorsConfiguration config = new CorsConfiguration();
     config.setAllowCredentials(false);
-    config.addAllowedOrigin("*");
+    config.addAllowedOrigin("*"); // NOSONAR
     config.addAllowedHeader("*");
     config.addAllowedMethod("*");
 

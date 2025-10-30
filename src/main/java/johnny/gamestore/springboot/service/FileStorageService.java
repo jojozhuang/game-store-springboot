@@ -57,17 +57,21 @@ public class FileStorageService {
         throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
       }
 
+      String contentType = file.getContentType();
+      if (contentType == null || !contentType.startsWith("image/")) {
+        throw new IllegalArgumentException("Only image uploads are allowed.");
+      }
+
       // create unique name
       long tick = System.currentTimeMillis() * TEN_THOUSAND + TICKS_AT_EPOCH;
-      fileName = String.valueOf(tick).concat("_").concat(file.getOriginalFilename());
+      fileName = String.valueOf(tick).concat("_").concat(fileName);
       // Copy file to the target location (Replacing existing file with the same name)
       Path targetLocation = this.fileStorageLocation.resolve(fileName);
 
       Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
       String absolutePath = targetLocation.toString();
       String rootPath = this.fileStorageLocation.getParent().toAbsolutePath().toString();
-      String relativeURL = absolutePath.replace(rootPath, "");
-      return relativeURL;
+      return absolutePath.replace(rootPath, "");
     } catch (IOException ex) {
       throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
     }
