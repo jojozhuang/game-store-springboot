@@ -3,6 +3,7 @@ package johnny.gamestore.springboot.controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import johnny.gamestore.springboot.domain.Product;
+import johnny.gamestore.springboot.domain.ProductDto;
 import johnny.gamestore.springboot.paging.PagedResource;
 import johnny.gamestore.springboot.property.UrlConfigProperties;
 import johnny.gamestore.springboot.service.ProductRequest;
@@ -134,11 +135,23 @@ public class ProductController extends BaseController {
       @ApiResponse(responseCode = "201", description = "Created one new product",
         content = {@Content(schema = @Schema(implementation = Product.class))})})
   @PostMapping("")
-  public ResponseEntity<Product> create(@Valid @RequestBody Product product) {
-    product.setImage(product.getImage().replace(getBaseUrl(), ""));
+  public ResponseEntity<ProductDto> create(@Valid @RequestBody ProductDto productDto) {
+    // Convert DTO to entity
+    Product product = new Product();
+    product.setProductName(productDto.getProductName());
+    product.setPrice(productDto.getPrice());
+    product.setImage(productDto.getImage().replace(getBaseUrl(), ""));
     Product newProduct = productService.create(product);
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
+    // Convert entity to DTO with builder
+    ProductDto response = ProductDto.builder()
+        .id(newProduct.getId())
+        .productName(newProduct.getProductName())
+        .price(newProduct.getPrice())
+        .image(newProduct.getImage())
+        .build();
+
+    return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
 
   // PUT /products/5
@@ -149,18 +162,25 @@ public class ProductController extends BaseController {
       @ApiResponse(responseCode = "404", description = "Product is not found with the given id",
         content = @Content)})
   @PutMapping("/{id}")
-  public ResponseEntity<Product> update(@PathVariable(value = "id") Long id,
-                                        @Valid @RequestBody Product product) throws Exception {
+  public ResponseEntity<ProductDto> update(@PathVariable(value = "id") Long id,
+                                           @Valid @RequestBody ProductDto productDto) throws Exception {
     if (!productService.exists(id)) {
       return ResponseEntity.notFound().build();
     }
-    Product oldProduct = productService.findById(id);
-    oldProduct.setProductName(product.getProductName());
-    oldProduct.setPrice(product.getPrice());
-    oldProduct.setImage(product.getImage().replace(getBaseUrl(), ""));
+    Product currentProduct = productService.findById(id);
+    currentProduct.setProductName(productDto.getProductName());
+    currentProduct.setPrice(productDto.getPrice());
+    currentProduct.setImage(productDto.getImage().replace(getBaseUrl(), ""));
 
-    Product updProduct = productService.update(oldProduct);
-    return ResponseEntity.ok(updProduct);
+    Product newProduct = productService.update(currentProduct);
+    ProductDto response = ProductDto.builder()
+        .id(newProduct.getId())
+        .productName(newProduct.getProductName())
+        .price(newProduct.getPrice())
+        .image(newProduct.getImage())
+        .build();
+
+    return ResponseEntity.ok(response);
   }
 
   // DELETE /products/5
