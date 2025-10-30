@@ -48,32 +48,37 @@ public class FileStorageService {
    * @return file path
    */
   public String storeFile(MultipartFile file) {
-    // Normalize file name
-    String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-
     try {
-      // Check if the file's name contains invalid characters
-      if (fileName.contains("..")) {
-        throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
+      // Normalize and sanitize original filename
+      String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
+
+      // Prevent path traversal
+      if (originalFileName.contains("..")) {
+        throw new FileStorageException("Sorry! Filename contains invalid path sequence " + originalFileName);
       }
 
+      // Validate content type
       String contentType = file.getContentType();
       if (contentType == null || !contentType.startsWith("image/")) {
         throw new IllegalArgumentException("Only image uploads are allowed.");
       }
 
-      // create unique name
+      // Generate server-controlled unique filename
       long tick = System.currentTimeMillis() * TEN_THOUSAND + TICKS_AT_EPOCH;
-      fileName = String.valueOf(tick).concat("_").concat(fileName);
-      // Copy file to the target location (Replacing existing file with the same name)
-      Path targetLocation = this.fileStorageLocation.resolve(fileName);
+      String safeFileName = tick + "_" + Paths.get(originalFileName).getFileName().toString();
 
+      // Resolve target location safely
+      Path targetLocation = this.fileStorageLocation.resolve(safeFileName).normalize();
+
+      // Copy file to the target location
       Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+
+      // Return relative path
       String absolutePath = targetLocation.toString();
       String rootPath = this.fileStorageLocation.getParent().toAbsolutePath().toString();
       return absolutePath.replace(rootPath, "");
     } catch (IOException ex) {
-      throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
+      throw new FileStorageException("Could not store file. Please try again!", ex);
     }
   }
 
