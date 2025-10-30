@@ -43,6 +43,8 @@ Access http://localhost:8080/api/products in web browser or PostMan, you should 
 ]
 ```
 
+## Production Mode
+
 Change base url of images. Edit `application.properties` file, set `spring.profiles.active` to `prod`.
 ```shell
 spring.profiles.active=prod
@@ -55,6 +57,11 @@ Then, launch the application with `java -jar` and append `--spring.profiles.acti
 ```shell
 java -jar target/restful-spring-boot-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
 ```
+
+## Public Endpoints
+
+- Azure: https://gamestore-api.azurewebsites.net/api/products
+- Render: https://game-store-springboot.onrender.com/api/products
 
 ## Postgresql Database
 
