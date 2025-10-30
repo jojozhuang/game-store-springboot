@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/jojozhuang0911/portfolios/_apis/build/status%2Fjojozhuang.game-store-springboot?branchName=main)](https://dev.azure.com/jojozhuang0911/portfolios/_build/latest?definitionId=4&branchName=main)
+
 # Game Store Springboot
 RESTful API for Game Store, developed with Spring Boot in Java.
 
