@@ -10,7 +10,6 @@ resources:
 
 variables:
   tag: '$(Build.BuildId)'
-  # imageName: 'myapp'       # Replace with your Docker image name
 
 stages:
   - stage: Build
@@ -30,15 +29,15 @@ stages:
               jdkArchitectureOption: 'x64'
               jdkSourceOption: 'PreInstalled'
 
-          # Run unit tests
-          - script: |
-              ./gradlew clean test
-            displayName: Run unit tests
-
           # Run Checkstyle
           - script: |
               ./gradlew checkstyleMain checkstyleTest
             displayName: Run Checkstyle analysis
+
+          # Run unit tests
+          - script: |
+              ./gradlew clean test
+            displayName: Run unit tests
 
           # Build Docker image
           - task: Docker@2
