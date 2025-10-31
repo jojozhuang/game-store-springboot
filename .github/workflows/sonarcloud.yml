@@ -39,3 +39,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Required for PR comments
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Check SonarCloud Quality Gate
+        uses: SonarSource/sonarcloud-github-action@v3
+        with:
+          args: sonar-quality-gate
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
