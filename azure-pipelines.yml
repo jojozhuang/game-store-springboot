@@ -3,27 +3,60 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-- main
+  - main
 
 resources:
-- repo: self
+  - repo: self
 
 variables:
   tag: '$(Build.BuildId)'
+  # imageName: 'myapp'       # Replace with your Docker image name
 
 stages:
-- stage: Build
-  displayName: Build image
-  jobs:
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - task: Docker@2
-      displayName: Build an image
-      inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-        tags: |
-          $(tag)
+  - stage: Build
+    displayName: Build, Test, Checkstyle, Docker
+    jobs:
+      - job: Build
+        displayName: Build and Test
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - checkout: self
+
+          # Setup JDK
+          - task: JavaToolInstaller@0
+            inputs:
+              versionSpec: '17'
+              jdkArchitectureOption: 'x64'
+              jdkSourceOption: 'PreInstalled'
+
+          # Run unit tests
+          - script: |
+              ./gradlew clean test
+            displayName: Run unit tests
+
+          # Run Checkstyle
+          - script: |
+              ./gradlew checkstyleMain checkstyleTest
+            displayName: Run Checkstyle analysis
+
+          # Build Docker image
+          - task: Docker@2
+            displayName: Build Docker image
+            inputs:
+              command: build
+              dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+              tags: |
+                $(imageName):$(tag)
+                $(imageName):latest
+
+          # Push Docker image (optional)
+          - task: Docker@2
+            displayName: Push Docker image
+            inputs:
+              command: push
+              containerRegistry: '$(dockerRegistryServiceConnection)' # Configure in DevOps
+              repository: '$(imageName)'
+              tags: |
+                $(tag)
+                latest
