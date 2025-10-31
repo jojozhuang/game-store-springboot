@@ -16,7 +16,7 @@ stages:
   # Stage 1: Initialize
   # -------------------------------
   - stage: Initialize
-    displayName: Initialize Environment
+    displayName: Initialize
     jobs:
       - job: Setup
         displayName: Setup JDK
@@ -34,7 +34,7 @@ stages:
   # Stage 2a: Checkstyle
   # -------------------------------
   - stage: Checkstyle
-    displayName: Run Checkstyle
+    displayName: Checkstyle
     dependsOn: Initialize
     jobs:
       - job: CheckstyleJob
@@ -51,7 +51,7 @@ stages:
   # Stage 2b: Unit Tests
   # -------------------------------
   - stage: UnitTest
-    displayName: Run Unit Tests
+    displayName: Unit Tests
     dependsOn: Initialize
     jobs:
       - job: UnitTestJob
@@ -68,7 +68,7 @@ stages:
   # Stage 3: Deploy
   # -------------------------------
   - stage: Deploy
-    displayName: Build Docker Image
+    displayName: Deploy
     dependsOn:
       - Checkstyle
       - UnitTest   # Deploy runs only after both Checkstyle and UnitTest finish
