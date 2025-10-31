@@ -3,27 +3,87 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-- main
+  - main
 
 resources:
-- repo: self
+  - repo: self
 
 variables:
   tag: '$(Build.BuildId)'
 
 stages:
-- stage: Build
-  displayName: Build image
-  jobs:
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - task: Docker@2
-      displayName: Build an image
-      inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-        tags: |
-          $(tag)
+  # -------------------------------
+  # Stage 1: Initialize
+  # -------------------------------
+  - stage: Initialize
+    displayName: Initialize
+    jobs:
+      - job: Setup
+        displayName: Setup JDK
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - checkout: self
+          - task: JavaToolInstaller@0
+            inputs:
+              versionSpec: '17'
+              jdkArchitectureOption: 'x64'
+              jdkSourceOption: 'PreInstalled'
+
+  # -------------------------------
+  # Stage 2a: Checkstyle
+  # -------------------------------
+  - stage: Checkstyle
+    displayName: Checkstyle
+    dependsOn: Initialize
+    jobs:
+      - job: CheckstyleJob
+        displayName: Checkstyle Analysis
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - checkout: self
+          - script: |
+              ./gradlew checkstyleMain checkstyleTest
+            displayName: Run Checkstyle analysis
+
+  # -------------------------------
+  # Stage 2b: Unit Tests
+  # -------------------------------
+  - stage: UnitTest
+    displayName: Unit Tests
+    dependsOn: Initialize
+    jobs:
+      - job: UnitTestJob
+        displayName: Unit Tests
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - checkout: self
+          - script: |
+              ./gradlew clean test
+            displayName: Run Unit Tests
+
+  # -------------------------------
+  # Stage 3: Deploy
+  # -------------------------------
+  - stage: Deploy
+    displayName: Deploy
+    dependsOn:
+      - Checkstyle
+      - UnitTest   # Deploy runs only after both Checkstyle and UnitTest finish
+    jobs:
+      - job: DockerBuild
+        displayName: Build Docker Image
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - checkout: self
+          - task: Docker@2
+            displayName: Build Docker image
+            inputs:
+              command: build
+              dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+              tags: |
+                $(imageName):$(tag)
+                $(imageName):latest
