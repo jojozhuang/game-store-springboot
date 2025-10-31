@@ -1,4 +1,4 @@
-[![Build Status](https://dev.azure.com/jojozhuang0911/portfolios/_apis/build/status%2Fjojozhuang.game-store-springboot?branchName=main)](https://dev.azure.com/jojozhuang0911/portfolios/_build/latest?definitionId=4&branchName=main)
+[![Build Status](https://dev.azure.com/jojozhuang0911/portfolios/_apis/build/status%2Fjojozhuang.game-store-springboot?branchName=main)](https://dev.azure.com/jojozhuang0911/portfolios/_build/latest?definitionId=4&branchName=main) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jojozhuang_game-store-springboot&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=jojozhuang_game-store-springboot)
 
 # Game Store Springboot
 RESTful API for Game Store, developed with Spring Boot in Java.
