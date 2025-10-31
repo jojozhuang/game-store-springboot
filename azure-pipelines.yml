@@ -12,7 +12,6 @@ variables:
   tag: '$(Build.BuildId)'
 
 stages:
-
   # -------------------------------
   # Stage 1: Initialize
   # -------------------------------
@@ -32,15 +31,14 @@ stages:
               jdkSourceOption: 'PreInstalled'
 
   # -------------------------------
-  # Stage 2: Build
+  # Stage 2a: Checkstyle
   # -------------------------------
-  - stage: Build
-    displayName: Build and Test
+  - stage: Checkstyle
+    displayName: Run Checkstyle
     dependsOn: Initialize
     jobs:
-      # Checkstyle job
-      - job: Checkstyle
-        displayName: Run Checkstyle
+      - job: CheckstyleJob
+        displayName: Checkstyle Analysis
         pool:
           vmImage: ubuntu-latest
         steps:
@@ -49,9 +47,15 @@ stages:
               ./gradlew checkstyleMain checkstyleTest
             displayName: Run Checkstyle analysis
 
-      # Unit test job
-      - job: UnitTest
-        displayName: Run Unit Tests
+  # -------------------------------
+  # Stage 2b: Unit Tests
+  # -------------------------------
+  - stage: UnitTest
+    displayName: Run Unit Tests
+    dependsOn: Initialize
+    jobs:
+      - job: UnitTestJob
+        displayName: Unit Tests
         pool:
           vmImage: ubuntu-latest
         steps:
@@ -65,7 +69,9 @@ stages:
   # -------------------------------
   - stage: Deploy
     displayName: Build Docker Image
-    dependsOn: Build
+    dependsOn:
+      - Checkstyle
+      - UnitTest   # Deploy runs only after both Checkstyle and UnitTest finish
     jobs:
       - job: DockerBuild
         displayName: Build Docker Image
@@ -73,7 +79,6 @@ stages:
           vmImage: ubuntu-latest
         steps:
           - checkout: self
-
           - task: Docker@2
             displayName: Build Docker image
             inputs:
