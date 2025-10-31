@@ -38,22 +38,27 @@ stages:
     displayName: Build and Test
     dependsOn: Initialize
     jobs:
-      - job: BuildJob
-        displayName: Checkstyle & Unit Tests
+      # Checkstyle job
+      - job: Checkstyle
+        displayName: Run Checkstyle
         pool:
           vmImage: ubuntu-latest
         steps:
           - checkout: self
-
-          # Run Checkstyle
           - script: |
               ./gradlew checkstyleMain checkstyleTest
             displayName: Run Checkstyle analysis
 
-          # Run unit tests
+      # Unit test job
+      - job: UnitTest
+        displayName: Run Unit Tests
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - checkout: self
           - script: |
               ./gradlew clean test
-            displayName: Run unit tests
+            displayName: Run Unit Tests
 
   # -------------------------------
   # Stage 3: Deploy
