@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import johnny.gamestore.springboot.domain.Product;
+import johnny.gamestore.springboot.model.Product;
 import johnny.gamestore.springboot.property.UrlConfigProperties;
 import johnny.gamestore.springboot.service.ProductService;
 import org.junit.jupiter.api.AfterEach;

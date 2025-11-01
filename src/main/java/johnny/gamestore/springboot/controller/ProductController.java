@@ -2,11 +2,11 @@ package johnny.gamestore.springboot.controller;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-import johnny.gamestore.springboot.domain.Product;
-import johnny.gamestore.springboot.domain.ProductDto;
+import johnny.gamestore.springboot.model.Product;
+import johnny.gamestore.springboot.model.ProductDto;
+import johnny.gamestore.springboot.model.ProductRequest;
 import johnny.gamestore.springboot.paging.PagedResource;
 import johnny.gamestore.springboot.property.UrlConfigProperties;
-import johnny.gamestore.springboot.service.ProductRequest;
 import johnny.gamestore.springboot.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

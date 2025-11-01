@@ -1,4 +1,4 @@
-package johnny.gamestore.springboot.service;
+package johnny.gamestore.springboot.model;
 
 import lombok.Builder;
 import lombok.Getter;

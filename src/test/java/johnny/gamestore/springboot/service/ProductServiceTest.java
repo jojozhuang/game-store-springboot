@@ -1,15 +1,14 @@
-package johnny.gamestore.springboot.controller;
+package johnny.gamestore.springboot.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import johnny.gamestore.springboot.domain.Product;
 import johnny.gamestore.springboot.exception.NotFoundException;
+import johnny.gamestore.springboot.model.Product;
+import johnny.gamestore.springboot.model.ProductRequest;
 import johnny.gamestore.springboot.repository.ProductRepository;
-import johnny.gamestore.springboot.service.ProductRequest;
-import johnny.gamestore.springboot.service.ProductService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

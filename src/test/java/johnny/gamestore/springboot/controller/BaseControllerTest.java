@@ -1,7 +1,7 @@
 package johnny.gamestore.springboot.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import johnny.gamestore.springboot.domain.Product;
+import johnny.gamestore.springboot.model.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**

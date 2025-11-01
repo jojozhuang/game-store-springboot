@@ -1,4 +1,4 @@
-package johnny.gamestore.springboot.domain;
+package johnny.gamestore.springboot.model;
 
 import lombok.Builder;
 import lombok.Value;
