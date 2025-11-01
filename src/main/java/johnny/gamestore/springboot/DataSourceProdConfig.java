@@ -1,5 +1,6 @@
 package johnny.gamestore.springboot;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,6 +8,7 @@ import org.springframework.context.annotation.Profile;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+@Slf4j
 @Configuration
 public class DataSourceProdConfig {
   private static final int USERINFO_SPLIT_LIMIT = 2;
@@ -15,6 +17,7 @@ public class DataSourceProdConfig {
   @Bean
   public BasicDataSource dataSource() throws URISyntaxException {
     String databaseUrl = System.getenv("DATABASE_URL");
+    log.info("DATABASE_URL: {}", databaseUrl);
     System.out.println("DATABASE_URL:" + databaseUrl);
     if (databaseUrl == null || databaseUrl.isEmpty()) {
       throw new IllegalStateException("DATABASE_URL environment variable is not set.");
