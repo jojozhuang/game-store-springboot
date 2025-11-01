@@ -61,7 +61,7 @@ stages:
         steps:
           - checkout: self
           - script: |
-              ./gradlew clean test
+              ./gradlew clean test jacocoTestReport
             displayName: Run Unit Tests
 
   # -------------------------------
