@@ -9,24 +9,29 @@ import java.net.URISyntaxException;
 
 @Configuration
 public class DataSourceConfig {
+  private static final int USERINFO_SPLIT_LIMIT = 2;
+
   @Profile("prod")
   @Bean
   public BasicDataSource dataSource() throws URISyntaxException {
     String databaseUrl = System.getenv("DATABASE_URL");
     System.out.println("DATABASE_URL:" + databaseUrl);
+    if (databaseUrl == null || databaseUrl.isEmpty()) {
+      throw new IllegalStateException("DATABASE_URL environment variable is not set.");
+    }
     // DATABASE_URL sample: postgres://<username>:<password>@<host>:<port>/<dbname>
     URI dbUri = new URI(databaseUrl);
-
-    String dbUrl =
-        "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
+    String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
     if ("localhost".equalsIgnoreCase(dbUri.getHost())) {
       dbUrl += "?sslmode=disable";
     } else {
       dbUrl += "?sslmode=require";
     }
-    String username = dbUri.getUserInfo().split(":")[0];
-    String password = dbUri.getUserInfo().split(":")[1];
 
+    String[] userInfoParts = dbUri.getUserInfo() != null
+      ? dbUri.getUserInfo().split(":", USERINFO_SPLIT_LIMIT) : new String[0];
+    String username = userInfoParts.length > 0 ? userInfoParts[0] : "";
+    String password = userInfoParts.length > 1 ? userInfoParts[1] : "";
     BasicDataSource basicDataSource = new BasicDataSource();
     basicDataSource.setUrl(dbUrl);
     basicDataSource.setUsername(username);
