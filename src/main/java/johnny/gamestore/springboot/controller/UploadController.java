@@ -1,7 +1,7 @@
 package johnny.gamestore.springboot.controller;
 
-import johnny.gamestore.springboot.domain.ResponseResult;
-import johnny.gamestore.springboot.domain.UploadModel;
+import johnny.gamestore.springboot.model.ResponseResult;
+import johnny.gamestore.springboot.model.UploadModel;
 import johnny.gamestore.springboot.service.FileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

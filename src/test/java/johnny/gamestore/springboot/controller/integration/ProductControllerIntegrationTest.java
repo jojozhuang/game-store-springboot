@@ -3,7 +3,7 @@ package johnny.gamestore.springboot.controller.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 import johnny.gamestore.springboot.GameStoreApplication;
 import johnny.gamestore.springboot.controller.BaseControllerTest;
-import johnny.gamestore.springboot.domain.Product;
+import johnny.gamestore.springboot.model.Product;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
