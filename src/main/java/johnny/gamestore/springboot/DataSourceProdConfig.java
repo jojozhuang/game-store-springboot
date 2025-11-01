@@ -8,7 +8,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @Configuration
-public class DataSourceConfig {
+public class DataSourceProdConfig {
   private static final int USERINFO_SPLIT_LIMIT = 2;
 
   @Profile("prod")
