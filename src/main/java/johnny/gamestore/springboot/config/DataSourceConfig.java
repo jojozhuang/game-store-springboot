@@ -1,43 +1,49 @@
-package johnny.gamestore.springboot;
+package johnny.gamestore.springboot.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collections;
 
 @Slf4j
-@Configuration
-public class DataSourceProdConfig {
+public final class DataSourceConfig {
   private static final int USERINFO_SPLIT_LIMIT = 2;
 
-  @Profile("prod")
-  @Bean
-  public BasicDataSource dataSource() throws URISyntaxException {
+  private DataSourceConfig() {
+    throw new UnsupportedOperationException("This class cannot be instantiated");
+  }
+
+  public static BasicDataSource createDataSource(boolean requireSsl, boolean setSchema) throws URISyntaxException {
     String databaseUrl = System.getenv("DATABASE_URL");
     log.info("DATABASE_URL: {}", databaseUrl);
     if (databaseUrl == null || databaseUrl.isEmpty()) {
       throw new IllegalStateException("DATABASE_URL environment variable is not set.");
     }
-    // DATABASE_URL sample: postgres://<username>:<password>@<host>:<port>/<dbname>
+
     URI dbUri = new URI(databaseUrl);
     String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
-    if ("localhost".equalsIgnoreCase(dbUri.getHost())) {
-      dbUrl += "?sslmode=disable";
-    } else {
+
+    if (requireSsl) {
       dbUrl += "?sslmode=require";
+    } else if ("localhost".equalsIgnoreCase(dbUri.getHost())) {
+      dbUrl += "?sslmode=disable";
     }
 
     String[] userInfoParts = dbUri.getUserInfo() != null
-      ? dbUri.getUserInfo().split(":", USERINFO_SPLIT_LIMIT) : new String[0];
+      ? dbUri.getUserInfo().split(":", USERINFO_SPLIT_LIMIT)
+      : new String[0];
     String username = userInfoParts.length > 0 ? userInfoParts[0] : "";
     String password = userInfoParts.length > 1 ? userInfoParts[1] : "";
+
     BasicDataSource basicDataSource = new BasicDataSource();
     basicDataSource.setUrl(dbUrl);
     basicDataSource.setUsername(username);
     basicDataSource.setPassword(password);
+
+    if (setSchema) {
+      basicDataSource.setConnectionInitSqls(Collections.singletonList("SET search_path TO gamestore"));
+    }
 
     return basicDataSource;
   }
