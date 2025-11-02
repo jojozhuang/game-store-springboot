@@ -18,7 +18,6 @@ public class DataSourceProdConfig {
   public BasicDataSource dataSource() throws URISyntaxException {
     String databaseUrl = System.getenv("DATABASE_URL");
     log.info("DATABASE_URL: {}", databaseUrl);
-    System.out.println("DATABASE_URL:" + databaseUrl);
     if (databaseUrl == null || databaseUrl.isEmpty()) {
       throw new IllegalStateException("DATABASE_URL environment variable is not set.");
     }

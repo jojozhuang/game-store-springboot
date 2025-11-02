@@ -52,9 +52,7 @@ public class ProductController extends BaseController {
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public Iterable<Product> findAll() {
     List<Product> products = productService.findAll();
-    products.forEach(product -> {
-      product.setImage(getBaseUrl() + product.getImage());
-    });
+    products.forEach(product -> product.setImage(getBaseUrl() + product.getImage()));
     Collections.reverse(products);
     return products;
   }
