@@ -3,6 +3,12 @@ package johnny.gamestore.springboot.controller;
 import johnny.gamestore.springboot.model.ResponseResult;
 import johnny.gamestore.springboot.model.UploadModel;
 import johnny.gamestore.springboot.service.FileStorageService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +24,26 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Tag(name = "File Upload", description = "APIs for uploading single or multiple files")
 @RestController
 @RequestMapping("/api/upload")
 public class UploadController extends BaseController {
   @Autowired
   private FileStorageService fileStorageService;
 
-  // 3.1.1 Single file upload
+  @Operation(
+      summary = "Upload a single file",
+      description = "Uploads a single file and returns the file URL.",
+      responses = {
+        @ApiResponse(responseCode = "200", description = "File uploaded successfully",
+          content = @Content(schema = @Schema(implementation = ResponseResult.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid file or upload error")
+      }
+    )
   @PostMapping("")
-  public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile uploadfile) {
+  public ResponseEntity<?> uploadFile(
+      @Parameter(description = "File to upload", required = true)
+      @RequestParam("file") MultipartFile uploadfile) {
     if (uploadfile.isEmpty()) {
       return ResponseEntity.ok().body("please select a file!");
     }
@@ -43,15 +60,26 @@ public class UploadController extends BaseController {
     return ResponseEntity.ok(rr);
   }
 
-  // 3.1.2 Multiple file upload
+  @Operation(
+      summary = "Upload multiple files",
+      description = "Uploads multiple files with an extra form field.",
+      responses = {
+        @ApiResponse(responseCode = "200", description = "Files uploaded successfully"),
+        @ApiResponse(responseCode = "400", description = "Upload failed or invalid files")
+      }
+    )
   @PostMapping("/multi")
-  public ResponseEntity<?> uploadFileMulti(@RequestParam("extraField") String extraField,
-                                           @RequestParam("files") MultipartFile[] uploadfiles) {
-    // Get file name
-    String uploadedFileName = Arrays.stream(uploadfiles).map(x -> x.getOriginalFilename())
-        .filter(x -> !StringUtils.isEmpty(x)).collect(Collectors.joining(","));
+  public ResponseEntity<?> uploadFileMulti(
+      @Parameter(description = "Extra metadata field", example = "exampleField")
+      @RequestParam("extraField") String extraField,
+      @Parameter(description = "Files to upload", required = true)
+      @RequestParam("files") MultipartFile[] uploadfiles) {
+    String uploadedFileName = Arrays.stream(uploadfiles)
+        .map(MultipartFile::getOriginalFilename)
+        .filter(StringUtils::hasText)
+        .collect(Collectors.joining(","));
 
-    if (StringUtils.isEmpty(uploadedFileName)) {
+    if (!StringUtils.hasText(uploadedFileName)) {
       return ResponseEntity.ok().body("please select a file!");
     }
 
@@ -64,9 +92,18 @@ public class UploadController extends BaseController {
     return ResponseEntity.ok().body("Successfully uploaded - " + uploadedFileName);
   }
 
-  // 3.1.3 maps html form to a Model
+  @Operation(
+      summary = "Upload multiple files via form model",
+      description = "Uploads multiple files using a model binding form submission.",
+      responses = {
+        @ApiResponse(responseCode = "200", description = "Files uploaded successfully"),
+        @ApiResponse(responseCode = "400", description = "Upload failed or invalid form")
+      }
+  )
   @PostMapping("/multi/model")
-  public ResponseEntity<?> multiUploadFileModel(@ModelAttribute UploadModel model) {
+  public ResponseEntity<?> multiUploadFileModel(
+      @Parameter(description = "Upload form model", required = true)
+      @ModelAttribute UploadModel model) {
     try {
       saveUploadedFiles(Arrays.asList(model.getFiles()));
     } catch (IOException e) {
@@ -76,7 +113,6 @@ public class UploadController extends BaseController {
     return ResponseEntity.ok().body("Successfully uploaded!");
   }
 
-  //save file
   private String[] saveUploadedFiles(List<MultipartFile> files) throws IOException {
     String[] fileUrls = new String[files.size()];
     int index = 0;
@@ -84,7 +120,6 @@ public class UploadController extends BaseController {
       if (file.isEmpty()) {
         continue;
       }
-
       fileUrls[index] = fileStorageService.storeFile(file);
       index++;
     }

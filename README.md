@@ -287,3 +287,10 @@ Read tutorial [Building RESTful API with Spring Boot](https://jojozhuang.github.
 - Run with `--debug` option to get more log output.
 - Run with `--scan` to get full insights.
 
+# API documentation
+
+Start Spring Boot app and visit:
+
+- Swagger UI: http://localhost:8080/swagger-ui/index.html
+
+![swagger](./assets/swagger-ui.png)
