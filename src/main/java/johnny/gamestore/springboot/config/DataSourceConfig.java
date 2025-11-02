@@ -10,6 +10,10 @@ import java.util.Collections;
 public final class DataSourceConfig {
   private static final int USERINFO_SPLIT_LIMIT = 2;
 
+  private DataSourceConfig() {
+    throw new UnsupportedOperationException("This class cannot be instantiated");
+  }
+
   public static BasicDataSource createDataSource(boolean requireSsl, boolean setSchema) throws URISyntaxException {
     String databaseUrl = System.getenv("DATABASE_URL");
     log.info("DATABASE_URL: {}", databaseUrl);
