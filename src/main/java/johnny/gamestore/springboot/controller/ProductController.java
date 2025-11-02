@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.HateoasPageableHandlerMethodArgumentResolver;
@@ -34,6 +35,9 @@ import java.util.Collections;
 import java.util.List;
 import javax.validation.Valid;
 
+@Tag(
+    name = "Product Management",
+    description = "APIs to manage product listings, including creation, updates, and queries")
 @RestController
 @RequestMapping("/api/products")
 public class ProductController extends BaseController {
