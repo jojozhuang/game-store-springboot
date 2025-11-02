@@ -7,7 +7,7 @@ import org.springframework.util.StringUtils;
 
 public class BaseController {
   @Autowired
-  protected UrlConfigProperties urlConfigProperties;
+  private UrlConfigProperties urlConfigProperties;
 
   protected String getBaseUrl() {
     String baseUrl = urlConfigProperties.getBaseUrl();
