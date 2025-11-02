@@ -44,7 +44,7 @@ public class UploadController extends BaseController {
   }
 
   // 3.1.2 Multiple file upload
-  @PostMapping("/api/upload/multi")
+  @PostMapping("/multi")
   public ResponseEntity<?> uploadFileMulti(@RequestParam("extraField") String extraField,
                                            @RequestParam("files") MultipartFile[] uploadfiles) {
     // Get file name
@@ -65,7 +65,7 @@ public class UploadController extends BaseController {
   }
 
   // 3.1.3 maps html form to a Model
-  @PostMapping("/api/upload/multi/model")
+  @PostMapping("/multi/model")
   public ResponseEntity<?> multiUploadFileModel(@ModelAttribute UploadModel model) {
     try {
       saveUploadedFiles(Arrays.asList(model.getFiles()));
