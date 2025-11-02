@@ -32,13 +32,13 @@ public class UploadController extends BaseController {
   private FileStorageService fileStorageService;
 
   @Operation(
-      summary = "Upload a single file",
-      description = "Uploads a single file and returns the file URL.",
-      responses = {
-        @ApiResponse(responseCode = "200", description = "File uploaded successfully",
-          content = @Content(schema = @Schema(implementation = ResponseResult.class))),
-        @ApiResponse(responseCode = "400", description = "Invalid file or upload error")
-      }
+    summary = "Upload a single file",
+    description = "Uploads a single file and returns the file URL.",
+    responses = {
+      @ApiResponse(responseCode = "200", description = "File uploaded successfully",
+        content = @Content(schema = @Schema(implementation = ResponseResult.class))),
+      @ApiResponse(responseCode = "400", description = "Invalid file or upload error")
+    }
     )
   @PostMapping("")
   public ResponseEntity<?> uploadFile(

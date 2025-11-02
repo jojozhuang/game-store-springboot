@@ -36,8 +36,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 @Tag(
-    name = "Product Management",
-    description = "APIs to manage product listings, including creation, updates, and queries")
+  name = "Product Management",
+  description = "APIs to manage product listings, including creation, updates, and queries")
 @RestController
 @RequestMapping("/api/products")
 public class ProductController extends BaseController {
@@ -48,8 +48,8 @@ public class ProductController extends BaseController {
   @Operation(summary = "Get all products", description = "Get all products sorted by id",
       tags = { "Product Controller" })
   @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Successful retrieved products",
-        content = @Content(array = @ArraySchema(schema = @Schema(implementation = Product.class)))) })
+    @ApiResponse(responseCode = "200", description = "Successful retrieved products",
+      content = @Content(array = @ArraySchema(schema = @Schema(implementation = Product.class)))) })
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public Iterable<Product> findAll() {
     List<Product> products = productService.findAll();
