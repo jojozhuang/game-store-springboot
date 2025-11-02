@@ -1,12 +1,17 @@
 package johnny.gamestore.springboot;
 
+import static org.mockito.Mockito.mockStatic;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class GameStoreApplicationTest {
   @Test
-  void contextLoads() {
-    // If the application context fails to start, this test will fail
+  void mainMethodShouldRunSpringApplication() {
+    try (var mocked = mockStatic(SpringApplication.class)) {
+      GameStoreApplication.main(new String[] {});
+      mocked.verify(() -> SpringApplication.run(GameStoreApplication.class, new String[] {}));
+    }
   }
 }
