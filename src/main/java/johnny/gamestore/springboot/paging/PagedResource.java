@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class PagedResource<T> implements Serializable {
-  private List<T> data;
+  private transient List<T> data;
 
   private Pagination pagination;
 
