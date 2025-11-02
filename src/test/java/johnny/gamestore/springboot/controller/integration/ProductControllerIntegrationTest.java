@@ -25,9 +25,6 @@ public class ProductControllerIntegrationTest extends BaseControllerTest {
   }
 
   @Test
-  public void contextLoads() {}
-
-  @Test
   public void testGetAllProducts() {
     ResponseEntity<Product[]> response = restTemplate.getForEntity(getRootUrl(), Product[].class);
 

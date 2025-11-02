@@ -8,6 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 public class UrlUtil {
   private static final int DEFAULT_PORT = 80;
 
+  private UrlUtil() {
+    throw new UnsupportedOperationException("Utility class — instantiation not allowed");
+  }
+
   public static String getBaseEnvLinkURL() {
     String baseEnvLinkURL = null;
     HttpServletRequest currentRequest =
