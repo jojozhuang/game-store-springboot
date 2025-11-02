@@ -7,7 +7,7 @@ import java.net.URISyntaxException;
 import java.util.Collections;
 
 @Slf4j
-public final class DataSourceFactory {
+public final class DataSourceConfig {
   private static final int USERINFO_SPLIT_LIMIT = 2;
 
   public static BasicDataSource createDataSource(boolean requireSsl, boolean setSchema) throws URISyntaxException {

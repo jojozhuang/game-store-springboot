@@ -11,6 +11,6 @@ import java.net.URISyntaxException;
 public class DataSourceProdConfig {
   @Bean
   public BasicDataSource dataSource() throws URISyntaxException {
-    return DataSourceFactory.createDataSource(true, false);
+    return DataSourceConfig.createDataSource(true, false);
   }
 }
