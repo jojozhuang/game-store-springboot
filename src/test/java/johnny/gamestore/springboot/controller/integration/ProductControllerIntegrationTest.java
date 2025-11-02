@@ -2,7 +2,7 @@ package johnny.gamestore.springboot.controller.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import johnny.gamestore.springboot.GameStoreApplication;
-import johnny.gamestore.springboot.controller.BaseControllerTest;
+import johnny.gamestore.springboot.helper.TestHelper;
 import johnny.gamestore.springboot.model.Product;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @SpringBootTest(classes = GameStoreApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ProductControllerIntegrationTest extends BaseControllerTest {
+public class ProductControllerIntegrationTest {
   @Autowired
   private TestRestTemplate restTemplate;
 
@@ -31,14 +31,14 @@ public class ProductControllerIntegrationTest extends BaseControllerTest {
     Product[] products = response.getBody();
     assertThat(products).isNotNull();
     assertThat(products.length).isEqualTo(3);
-    assertProduct(products[0], mockProduct3());
-    assertProduct(products[1], mockProduct2());
-    assertProduct(products[2], mockProduct1());
+    assertProduct(products[0], TestHelper.mockProduct3());
+    assertProduct(products[1], TestHelper.mockProduct2());
+    assertProduct(products[2], TestHelper.mockProduct1());
   }
 
   @Test
   public void testGetProductById() {
-    Product mockProduct = mockProduct1();
+    Product mockProduct = TestHelper.mockProduct1();
     Product product = restTemplate.getForObject(getRootUrl() + "/1", Product.class);
 
     assertProduct(product, mockProduct);
@@ -46,7 +46,7 @@ public class ProductControllerIntegrationTest extends BaseControllerTest {
 
   @Test
   public void testCreateProduct() {
-    Product mockProduct = mockProduct1();
+    Product mockProduct = TestHelper.mockProduct1();
     ResponseEntity<Product> postResponse = restTemplate.postForEntity(getRootUrl(), mockProduct, Product.class);
 
     assertThat(postResponse).isNotNull();
@@ -71,7 +71,7 @@ public class ProductControllerIntegrationTest extends BaseControllerTest {
     assertProduct(updatedProduct, product);
 
     // reset data
-    Product mockProduct = mockProduct2();
+    Product mockProduct = TestHelper.mockProduct2();
     product.setProductName(mockProduct.getProductName());
     product.setPrice(mockProduct.getPrice());
     restTemplate.put(getRootUrl() + "/" + id, product);
@@ -89,7 +89,14 @@ public class ProductControllerIntegrationTest extends BaseControllerTest {
     assertThat(product).isNull();
 
     // reset data
-    Product mockProduct = mockProduct3();
+    Product mockProduct = TestHelper.mockProduct3();
     restTemplate.postForEntity(getRootUrl(), mockProduct, Product.class);
+  }
+
+  private void assertProduct(Product actual, Product expected) {
+    assertThat(actual).isNotNull();
+    assertThat(actual.getProductName()).isEqualTo(expected.getProductName());
+    assertThat(actual.getPrice()).isEqualTo(expected.getPrice());
+    assertThat(actual.getImage()).contains(expected.getImage());
   }
 }

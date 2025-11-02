@@ -6,7 +6,6 @@ import johnny.gamestore.springboot.model.Product;
 import johnny.gamestore.springboot.model.ProductDto;
 import johnny.gamestore.springboot.model.ProductRequest;
 import johnny.gamestore.springboot.paging.PagedResource;
-import johnny.gamestore.springboot.property.UrlConfigProperties;
 import johnny.gamestore.springboot.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -38,8 +37,6 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api/products")
 public class ProductController extends BaseController {
-  @Autowired
-  private UrlConfigProperties urlConfigProperties;
   @Autowired
   ProductService productService;
 
@@ -107,7 +104,7 @@ public class ProductController extends BaseController {
     return new PagedResource<>(productPagedResourcesAssembler,
         linkBuilder,
         result,
-        urlConfigProperties.getBaseUrl());
+        getBaseUrl());
   }
 
   // GET /products/5
