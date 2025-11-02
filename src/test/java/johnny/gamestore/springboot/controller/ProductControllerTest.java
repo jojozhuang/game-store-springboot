@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import johnny.gamestore.springboot.helper.TestHelper;
 import johnny.gamestore.springboot.model.Product;
 import johnny.gamestore.springboot.property.UrlConfigProperties;
 import johnny.gamestore.springboot.service.ProductService;
@@ -26,7 +27,7 @@ import java.util.List;
 
 @EnableConfigurationProperties(UrlConfigProperties.class)
 @WebMvcTest(ProductController.class)
-class ProductControllerTest extends BaseControllerTest {
+class ProductControllerTest {
   @MockBean
   ProductService productService;
 
@@ -35,7 +36,7 @@ class ProductControllerTest extends BaseControllerTest {
 
   @Test
   public void testFindAll() throws Exception {
-    when(productService.findAll()).thenReturn(List.of(mockProduct1()));
+    when(productService.findAll()).thenReturn(List.of(TestHelper.mockProduct1()));
 
     mockMvc.perform(get("/api/products"))
         .andExpect(status().isOk())
@@ -46,7 +47,7 @@ class ProductControllerTest extends BaseControllerTest {
 
   @Test
   public void testFindAllPagination() throws Exception {
-    Page page = new PageImpl(List.of(mockProduct1()));
+    Page page = new PageImpl(List.of(TestHelper.mockProduct1()));
     when(productService.findAllByPrice(any())).thenReturn(page);
 
     mockMvc.perform(get("/api/products/all?page=0&size=5&sortby=id"))
@@ -59,7 +60,8 @@ class ProductControllerTest extends BaseControllerTest {
   @Test
   public void testFindAllCustomPagination() throws Exception {
     Pageable pageable = PageRequest.of(0, 1);
-    List<Product> products = List.of(mockProduct2WithId(), mockProduct2WithId(), mockProduct2WithId());
+    List<Product> products = List.of(TestHelper.mockProduct2WithId(),
+        TestHelper.mockProduct2WithId(), TestHelper.mockProduct2WithId());
     Page page = new PageImpl(products, pageable, 3);
     when(productService.findAllByPrice(any())).thenReturn(page);
 
@@ -78,7 +80,7 @@ class ProductControllerTest extends BaseControllerTest {
   @Test
   public void testFindOne() throws Exception {
     when(productService.exists(1)).thenReturn(true);
-    when(productService.findById(1)).thenReturn(mockProduct1());
+    when(productService.findById(1)).thenReturn(TestHelper.mockProduct1());
 
     mockMvc.perform(get("/api/products/1"))
         .andExpect(status().isOk())
@@ -87,10 +89,10 @@ class ProductControllerTest extends BaseControllerTest {
 
   @Test
   public void testCreate() throws Exception {
-    when(productService.create(any())).thenReturn(mockProduct1WithId());
+    when(productService.create(any())).thenReturn(TestHelper.mockProduct1WithId());
 
     mockMvc.perform(post("/api/products")
-        .content(asJsonString(mockProduct1()))
+        .content(TestHelper.asJsonString(TestHelper.mockProduct1()))
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isCreated())
@@ -99,16 +101,16 @@ class ProductControllerTest extends BaseControllerTest {
 
   @Test
   public void testUpdate() throws Exception {
-    Product product1 = mockProduct1WithId();
-    Product product3 = mockProduct2WithId();
+    Product product1 = TestHelper.mockProduct1WithId();
+    Product product3 = TestHelper.mockProduct2WithId();
     product3.setId(1L);
     when(productService.exists(1)).thenReturn(true);
     when(productService.findById(1)).thenReturn(product1);
     when(productService.update(any())).thenReturn(product3);
 
-    Product product2 = mockProduct2();
+    Product product2 = TestHelper.mockProduct2();
     mockMvc.perform(put("/api/products/1")
-        .content(asJsonString(product2))
+        .content(TestHelper.asJsonString(product2))
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
