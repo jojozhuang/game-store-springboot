@@ -21,13 +21,16 @@ class UrlUtilTest {
     var constructor = UrlUtil.class.getDeclaredConstructor();
     constructor.setAccessible(true);
 
-    Exception exception = assertThrows(InvocationTargetException.class, () -> {
-      constructor.newInstance();
-    });
+    Exception exception =
+        assertThrows(
+            InvocationTargetException.class,
+            () -> {
+              constructor.newInstance();
+            });
 
     // Verify the *cause* of the InvocationTargetException
     assertThat(exception.getCause())
-      .isInstanceOf(UnsupportedOperationException.class)
+        .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("Utility class — instantiation not allowed");
   }
 

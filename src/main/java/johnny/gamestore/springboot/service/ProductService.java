@@ -14,8 +14,7 @@ import java.util.Optional;
 
 @Service
 public class ProductService {
-  @Autowired
-  ProductRepository productRepository;
+  @Autowired ProductRepository productRepository;
 
   public List<Product> findAll() {
     return productRepository.findAll();
@@ -50,7 +49,9 @@ public class ProductService {
   public Page<Product> findAllByPrice(ProductRequest productRequest) {
     return productRepository.findAllByPrice(
         productRequest.getPrice(),
-        PageRequest.of(productRequest.getPage(), productRequest.getSize(),
+        PageRequest.of(
+            productRequest.getPage(),
+            productRequest.getSize(),
             sortByProductIdDesc(productRequest.getSortBy())));
   }
 

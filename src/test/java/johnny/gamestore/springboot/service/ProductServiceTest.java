@@ -24,11 +24,9 @@ import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {
-  @InjectMocks
-  ProductService productService;
+  @InjectMocks ProductService productService;
 
-  @Mock
-  ProductRepository productRepository;
+  @Mock ProductRepository productRepository;
 
   @Test
   public void testFindAll() {
@@ -47,7 +45,7 @@ public class ProductServiceTest {
   }
 
   @Test
-    public void testFindById() throws Exception {
+  public void testFindById() throws Exception {
     Product mockProduct = new Product();
     mockProduct.setProductName("Wii");
 
@@ -64,9 +62,11 @@ public class ProductServiceTest {
 
     when(productRepository.findById(1L)).thenReturn(mockProduct);
 
-    assertThrows(NotFoundException.class, () -> {
-      productService.findById(1);
-    });
+    assertThrows(
+        NotFoundException.class,
+        () -> {
+          productService.findById(1);
+        });
     verify(productRepository).findById(1L);
   }
 
@@ -121,11 +121,7 @@ public class ProductServiceTest {
     mockProduct2.setPrice(269);
     mockProduct2.setProductName("XBox");
 
-    ProductRequest pr = ProductRequest.builder()
-        .price(269)
-        .page(0)
-        .size(10)
-        .sortBy("id").build();
+    ProductRequest pr = ProductRequest.builder().price(269).page(0).size(10).sortBy("id").build();
 
     Pageable pageable = PageRequest.of(0, 10, Sort.by("id").descending());
 

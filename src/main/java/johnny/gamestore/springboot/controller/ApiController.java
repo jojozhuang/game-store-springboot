@@ -12,12 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class ApiController {
   @Operation(
-    summary = "Welcome message",
-    description = "Returns a simple greeting message to confirm the API is running.",
-    responses = {
-      @ApiResponse(responseCode = "200", description = "API is up and responding with welcome message")
-    }
-  )
+      summary = "Welcome message",
+      description = "Returns a simple greeting message to confirm the API is running.",
+      responses = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "API is up and responding with welcome message")
+      })
   @GetMapping("")
   public String home() {
     return "Hello! welcome to game store api!";

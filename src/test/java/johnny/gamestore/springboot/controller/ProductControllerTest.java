@@ -28,17 +28,16 @@ import java.util.List;
 @EnableConfigurationProperties(UrlConfigProperties.class)
 @WebMvcTest(ProductController.class)
 class ProductControllerTest {
-  @MockBean
-  ProductService productService;
+  @MockBean ProductService productService;
 
-  @Autowired
-  MockMvc mockMvc;
+  @Autowired MockMvc mockMvc;
 
   @Test
   public void testFindAll() throws Exception {
     when(productService.findAll()).thenReturn(List.of(TestHelper.mockProduct1()));
 
-    mockMvc.perform(get("/api/products"))
+    mockMvc
+        .perform(get("/api/products"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$").isArray())
         .andExpect(jsonPath("$[0].productName").isNotEmpty())
@@ -50,7 +49,8 @@ class ProductControllerTest {
     Page page = new PageImpl(List.of(TestHelper.mockProduct1()));
     when(productService.findAllByPrice(any())).thenReturn(page);
 
-    mockMvc.perform(get("/api/products/all?page=0&size=5&sortby=id"))
+    mockMvc
+        .perform(get("/api/products/all?page=0&size=5&sortby=id"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$").isArray())
         .andExpect(jsonPath("$[0].productName").isNotEmpty())
@@ -60,12 +60,16 @@ class ProductControllerTest {
   @Test
   public void testFindAllCustomPagination() throws Exception {
     Pageable pageable = PageRequest.of(0, 1);
-    List<Product> products = List.of(TestHelper.mockProduct2WithId(),
-        TestHelper.mockProduct2WithId(), TestHelper.mockProduct2WithId());
+    List<Product> products =
+        List.of(
+            TestHelper.mockProduct2WithId(),
+            TestHelper.mockProduct2WithId(),
+            TestHelper.mockProduct2WithId());
     Page page = new PageImpl(products, pageable, 3);
     when(productService.findAllByPrice(any())).thenReturn(page);
 
-    mockMvc.perform(get("/api/products/all-custom?page=0&size=1&sortby=id"))
+    mockMvc
+        .perform(get("/api/products/all-custom?page=0&size=1&sortby=id"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$").isNotEmpty())
         .andExpect(jsonPath("$.data").isNotEmpty())
@@ -82,7 +86,8 @@ class ProductControllerTest {
     when(productService.exists(1)).thenReturn(true);
     when(productService.findById(1)).thenReturn(TestHelper.mockProduct1());
 
-    mockMvc.perform(get("/api/products/1"))
+    mockMvc
+        .perform(get("/api/products/1"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.productName").value("Xbox 360"));
   }
@@ -91,10 +96,12 @@ class ProductControllerTest {
   public void testCreate() throws Exception {
     when(productService.create(any())).thenReturn(TestHelper.mockProduct1WithId());
 
-    mockMvc.perform(post("/api/products")
-        .content(TestHelper.asJsonString(TestHelper.mockProduct1()))
-        .contentType(MediaType.APPLICATION_JSON)
-        .accept(MediaType.APPLICATION_JSON))
+    mockMvc
+        .perform(
+            post("/api/products")
+                .content(TestHelper.asJsonString(TestHelper.mockProduct1()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.id").exists());
   }
@@ -109,10 +116,12 @@ class ProductControllerTest {
     when(productService.update(any())).thenReturn(product3);
 
     Product product2 = TestHelper.mockProduct2();
-    mockMvc.perform(put("/api/products/1")
-        .content(TestHelper.asJsonString(product2))
-        .contentType(MediaType.APPLICATION_JSON)
-        .accept(MediaType.APPLICATION_JSON))
+    mockMvc
+        .perform(
+            put("/api/products/1")
+                .content(TestHelper.asJsonString(product2))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").value(product3.getId()))
         .andExpect(jsonPath("$.productName").value(product3.getProductName()))
@@ -124,7 +133,6 @@ class ProductControllerTest {
   public void testDelete() throws Exception {
     when(productService.exists(1)).thenReturn(true);
 
-    mockMvc.perform(delete("/api/products/1"))
-        .andExpect(status().isOk());
+    mockMvc.perform(delete("/api/products/1")).andExpect(status().isOk());
   }
 }

@@ -13,6 +13,5 @@ import javax.validation.constraints.NotBlank;
 @Configuration
 @ConfigurationProperties(prefix = "site.urls")
 public class UrlConfigProperties {
-  @NotBlank
-  private String baseUrl;
+  @NotBlank private String baseUrl;
 }

@@ -6,8 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 public class BaseController {
-  @Autowired
-  private UrlConfigProperties urlConfigProperties;
+  @Autowired private UrlConfigProperties urlConfigProperties;
 
   protected String getBaseUrl() {
     String baseUrl = urlConfigProperties.getBaseUrl();

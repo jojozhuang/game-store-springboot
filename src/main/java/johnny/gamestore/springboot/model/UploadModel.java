@@ -5,9 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- * Model for upload file.
- */
+/** Model for upload file. */
 @Getter
 @Setter
 @NoArgsConstructor

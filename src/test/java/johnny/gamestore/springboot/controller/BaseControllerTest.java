@@ -16,11 +16,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class BaseControllerTest {
-  @InjectMocks
-  private BaseController baseController;  // Mockito will inject mocks here
+  @InjectMocks private BaseController baseController; // Mockito will inject mocks here
 
-  @Mock
-  private UrlConfigProperties urlConfigProperties;  // Mocked dependency
+  @Mock private UrlConfigProperties urlConfigProperties; // Mocked dependency
 
   @Test
   void getBaseUrl_returnsConfiguredUrl_whenNotEmpty() {

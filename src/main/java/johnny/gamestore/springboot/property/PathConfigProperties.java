@@ -13,6 +13,5 @@ import javax.validation.constraints.NotBlank;
 @Configuration
 @ConfigurationProperties(prefix = "site.paths")
 public class PathConfigProperties {
-  @NotBlank
-  private String uploadDir;
+  @NotBlank private String uploadDir;
 }

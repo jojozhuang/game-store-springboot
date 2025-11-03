@@ -12,13 +12,13 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-@SpringBootTest(classes = GameStoreApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+    classes = GameStoreApplication.class,
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ProductControllerIntegrationTest {
-  @Autowired
-  private TestRestTemplate restTemplate;
+  @Autowired private TestRestTemplate restTemplate;
 
-  @LocalServerPort
-  private int port;
+  @LocalServerPort private int port;
 
   private String getRootUrl() {
     return "http://localhost:" + port + "/api/products";
@@ -47,7 +47,8 @@ public class ProductControllerIntegrationTest {
   @Test
   public void testCreateProduct() {
     Product mockProduct = TestHelper.mockProduct1();
-    ResponseEntity<Product> postResponse = restTemplate.postForEntity(getRootUrl(), mockProduct, Product.class);
+    ResponseEntity<Product> postResponse =
+        restTemplate.postForEntity(getRootUrl(), mockProduct, Product.class);
 
     assertThat(postResponse).isNotNull();
     assertThat(postResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);

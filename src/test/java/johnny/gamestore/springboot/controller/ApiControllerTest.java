@@ -10,12 +10,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(ApiController.class)
 public class ApiControllerTest {
-  @Autowired
-  private MockMvc mockMvc;
+  @Autowired private MockMvc mockMvc;
 
   @Test
   public void testHomeEndpoint() throws Exception {
-    mockMvc.perform(get("/api"))
+    mockMvc
+        .perform(get("/api"))
         .andExpect(status().isOk())
         .andExpect(content().string("Hello! welcome to game store api!"));
   }

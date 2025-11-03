@@ -15,9 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
-/**
- * File storage service.
- */
+/** File storage service. */
 @Service
 public class FileStorageService {
   private static final long TICKS_AT_EPOCH = 621355968000000000L;
@@ -31,13 +29,14 @@ public class FileStorageService {
    */
   @Autowired
   public FileStorageService(PathConfigProperties pathConfigProperties) {
-    this.fileStorageLocation = Paths.get(pathConfigProperties.getUploadDir())
-      .toAbsolutePath().normalize();
+    this.fileStorageLocation =
+        Paths.get(pathConfigProperties.getUploadDir()).toAbsolutePath().normalize();
 
     try {
       Files.createDirectories(this.fileStorageLocation);
     } catch (Exception ex) {
-      throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex);
+      throw new FileStorageException(
+          "Could not create the directory where the uploaded files will be stored.", ex);
     }
   }
 
@@ -54,7 +53,8 @@ public class FileStorageService {
 
       // Prevent path traversal
       if (originalFileName.contains("..")) {
-        throw new FileStorageException("Sorry! Filename contains invalid path sequence " + originalFileName);
+        throw new FileStorageException(
+            "Sorry! Filename contains invalid path sequence " + originalFileName);
       }
 
       // Validate content type
