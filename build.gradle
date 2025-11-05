@@ -62,7 +62,7 @@ checkstyleTest {
 
 spotless {
     java {
-        googleJavaFormat()
+        googleJavaFormat('1.17.0')
         importOrder 'lombok', 'johnny', 'io', 'org', 'java', 'javax', ''
         removeUnusedImports()
         target 'src/**/*.java'

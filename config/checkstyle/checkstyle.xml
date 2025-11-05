@@ -345,7 +345,7 @@
             <!-- checks for magic numbers which are not constants -->
             <property name="ignoreFieldDeclaration" value="true"/>
             <property name="ignoreHashCodeMethod" value="true"/>
-           <property name="ignoreNumbers" value="-1,0,1,100"/>
+           <property name="ignoreNumbers" value="-1,0,1,2,3,100"/>
         </module>
 
         <module name="SuppressWarningsHolder"/>

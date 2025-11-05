@@ -8,8 +8,6 @@ import java.util.Collections;
 
 @Slf4j
 public final class DataSourceConfig {
-  private static final int USERINFO_SPLIT_LIMIT = 2;
-
   private DataSourceConfig() {
     throw new UnsupportedOperationException("This class cannot be instantiated");
   }
@@ -32,9 +30,7 @@ public final class DataSourceConfig {
     }
 
     String[] userInfoParts =
-        dbUri.getUserInfo() != null
-            ? dbUri.getUserInfo().split(":", USERINFO_SPLIT_LIMIT)
-            : new String[0];
+        dbUri.getUserInfo() != null ? dbUri.getUserInfo().split(":", 2) : new String[0];
     String username = userInfoParts.length > 0 ? userInfoParts[0] : "";
     String password = userInfoParts.length > 1 ? userInfoParts[1] : "";
 
