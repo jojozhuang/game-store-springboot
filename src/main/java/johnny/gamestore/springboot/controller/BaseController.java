@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2025 Johnny, Inc.
+ * All rights reserved. Patents pending.
+ */
+
 package johnny.gamestore.springboot.controller;
 
 import johnny.gamestore.springboot.property.UrlConfigProperties;
@@ -6,8 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 public class BaseController {
-  @Autowired
-  private UrlConfigProperties urlConfigProperties;
+  @Autowired private UrlConfigProperties urlConfigProperties;
 
   protected String getBaseUrl() {
     String baseUrl = urlConfigProperties.getBaseUrl();

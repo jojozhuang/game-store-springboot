@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2025 Johnny, Inc.
+ * All rights reserved. Patents pending.
+ */
+
 package johnny.gamestore.springboot.controller;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -41,15 +46,21 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api/products")
 public class ProductController extends BaseController {
-  @Autowired
-  ProductService productService;
+  @Autowired ProductService productService;
 
   // GET /products
-  @Operation(summary = "Get all products", description = "Get all products sorted by id",
-      tags = { "Product Controller" })
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Successful retrieved products",
-        content = @Content(array = @ArraySchema(schema = @Schema(implementation = Product.class)))) })
+  @Operation(
+      summary = "Get all products",
+      description = "Get all products sorted by id",
+      tags = {"Product Controller"})
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Successful retrieved products",
+            content =
+                @Content(array = @ArraySchema(schema = @Schema(implementation = Product.class))))
+      })
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public Iterable<Product> findAll() {
     List<Product> products = productService.findAll();
@@ -58,66 +69,88 @@ public class ProductController extends BaseController {
     return products;
   }
 
-  @Operation(summary = "Get all products in pagination", description = "Get all products in pagination",
-      tags = { "Product Controller" })
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Successful retrieved products",
-          content = @Content(array = @ArraySchema(schema = @Schema(implementation = Product.class)))) })
+  @Operation(
+      summary = "Get all products in pagination",
+      description = "Get all products in pagination",
+      tags = {"Product Controller"})
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Successful retrieved products",
+            content =
+                @Content(array = @ArraySchema(schema = @Schema(implementation = Product.class))))
+      })
   @GetMapping(value = "all", produces = MediaType.APPLICATION_JSON_VALUE)
   public Iterable<Product> findAllPagination(
       @RequestParam(value = "price", required = false, defaultValue = "269") String price,
       @RequestParam(value = "page", required = false, defaultValue = "0") int page,
       @RequestParam(value = "size", required = false, defaultValue = "3") int size,
       @RequestParam(value = "sortby", required = false, defaultValue = "id") String sortBy) {
-    Page<Product> result = productService
-        .findAllByPrice(ProductRequest.builder()
-            .price(Double.parseDouble(price))
-            .page(page)
-            .size(size)
-            .sortBy(sortBy)
-            .build());
+    Page<Product> result =
+        productService.findAllByPrice(
+            ProductRequest.builder()
+                .price(Double.parseDouble(price))
+                .page(page)
+                .size(size)
+                .sortBy(sortBy)
+                .build());
 
     return result.getContent();
   }
 
-  @Operation(summary = "Get all products in custom pagination", description = "Get all products in custom pagination",
-      tags = { "Product Controller" })
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Successful retrieved products",
-          content = @Content(array = @ArraySchema(schema = @Schema(implementation = Product.class)))) })
+  @Operation(
+      summary = "Get all products in custom pagination",
+      description = "Get all products in custom pagination",
+      tags = {"Product Controller"})
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Successful retrieved products",
+            content =
+                @Content(array = @ArraySchema(schema = @Schema(implementation = Product.class))))
+      })
   @GetMapping(value = "all-custom", produces = MediaType.APPLICATION_JSON_VALUE)
   public PagedResource<Product> findAllCustomPagination(
       @RequestParam(value = "price", required = false, defaultValue = "269") String price,
       @RequestParam(value = "page", required = false, defaultValue = "0") int page,
       @RequestParam(value = "size", required = false, defaultValue = "3") int size,
       @RequestParam(value = "sortby", required = false, defaultValue = "id") String sortBy) {
-    Page<Product> result = productService
-        .findAllByPrice(ProductRequest.builder()
-            .price(Double.parseDouble(price))
-            .page(page)
-            .size(size)
-            .sortBy(sortBy)
-            .build());
+    Page<Product> result =
+        productService.findAllByPrice(
+            ProductRequest.builder()
+                .price(Double.parseDouble(price))
+                .page(page)
+                .size(size)
+                .sortBy(sortBy)
+                .build());
 
     PagedResourcesAssembler<Product> productPagedResourcesAssembler =
         new PagedResourcesAssembler<>(new HateoasPageableHandlerMethodArgumentResolver(), null);
 
-    WebMvcLinkBuilder linkBuilder = linkTo(methodOn(this.getClass())
-        .findAllCustomPagination(price, page, size, sortBy));
+    WebMvcLinkBuilder linkBuilder =
+        linkTo(methodOn(this.getClass()).findAllCustomPagination(price, page, size, sortBy));
 
-    return new PagedResource<>(productPagedResourcesAssembler,
-        linkBuilder,
-        result,
-        getBaseUrl());
+    return new PagedResource<>(productPagedResourcesAssembler, linkBuilder, result, getBaseUrl());
   }
 
   // GET /products/5
-  @Operation(summary = "Get one product", description = "Get one product by id", tags = { "Product Controller" })
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Successful retrieved one product by id",
-        content = {@Content(schema = @Schema(implementation = Product.class))}),
-      @ApiResponse(responseCode = "404", description = "Product is not found with the given id",
-        content = @Content)})
+  @Operation(
+      summary = "Get one product",
+      description = "Get one product by id",
+      tags = {"Product Controller"})
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Successful retrieved one product by id",
+            content = {@Content(schema = @Schema(implementation = Product.class))}),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Product is not found with the given id",
+            content = @Content)
+      })
   @GetMapping("/{id}")
   public ResponseEntity<Product> findOne(@PathVariable(value = "id") long id) throws Exception {
     if (!productService.exists(id)) {
@@ -129,10 +162,17 @@ public class ProductController extends BaseController {
   }
 
   // POST /products
-  @Operation(summary = "Create new product", description = "Create new product", tags = { "Product Controller" })
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "201", description = "Created one new product",
-        content = {@Content(schema = @Schema(implementation = Product.class))})})
+  @Operation(
+      summary = "Create new product",
+      description = "Create new product",
+      tags = {"Product Controller"})
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "201",
+            description = "Created one new product",
+            content = {@Content(schema = @Schema(implementation = Product.class))})
+      })
   @PostMapping("")
   public ResponseEntity<ProductDto> create(@Valid @RequestBody ProductDto productDto) {
     // Convert DTO to entity
@@ -143,26 +183,37 @@ public class ProductController extends BaseController {
     Product newProduct = productService.create(product);
 
     // Convert entity to DTO with builder
-    ProductDto response = ProductDto.builder()
-        .id(newProduct.getId())
-        .productName(newProduct.getProductName())
-        .price(newProduct.getPrice())
-        .image(newProduct.getImage())
-        .build();
+    ProductDto response =
+        ProductDto.builder()
+            .id(newProduct.getId())
+            .productName(newProduct.getProductName())
+            .price(newProduct.getPrice())
+            .image(newProduct.getImage())
+            .build();
 
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
 
   // PUT /products/5
-  @Operation(summary = "Update one product", description = "Update one product", tags = { "Product Controller" })
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Update one product by id",
-        content = {@Content(schema = @Schema(implementation = Product.class))}),
-      @ApiResponse(responseCode = "404", description = "Product is not found with the given id",
-        content = @Content)})
+  @Operation(
+      summary = "Update one product",
+      description = "Update one product",
+      tags = {"Product Controller"})
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Update one product by id",
+            content = {@Content(schema = @Schema(implementation = Product.class))}),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Product is not found with the given id",
+            content = @Content)
+      })
   @PutMapping("/{id}")
-  public ResponseEntity<ProductDto> update(@PathVariable(value = "id") Long id,
-                                           @Valid @RequestBody ProductDto productDto) throws Exception {
+  public ResponseEntity<ProductDto> update(
+      @PathVariable(value = "id") Long id, @Valid @RequestBody ProductDto productDto)
+      throws Exception {
     if (!productService.exists(id)) {
       return ResponseEntity.notFound().build();
     }
@@ -172,24 +223,34 @@ public class ProductController extends BaseController {
     currentProduct.setImage(productDto.getImage().replace(getBaseUrl(), ""));
 
     Product newProduct = productService.update(currentProduct);
-    ProductDto response = ProductDto.builder()
-        .id(newProduct.getId())
-        .productName(newProduct.getProductName())
-        .price(newProduct.getPrice())
-        .image(newProduct.getImage())
-        .build();
+    ProductDto response =
+        ProductDto.builder()
+            .id(newProduct.getId())
+            .productName(newProduct.getProductName())
+            .price(newProduct.getPrice())
+            .image(newProduct.getImage())
+            .build();
 
     return ResponseEntity.ok(response);
   }
 
   // DELETE /products/5
   @DeleteMapping("/{id}")
-  @Operation(summary = "Delete one product", description = "Delete one product by id", tags = { "Product Controller" })
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Successfully deleted product",
-        content = {@Content(schema = @Schema(implementation = Product.class))}),
-      @ApiResponse(responseCode = "404", description = "Product is not found with the given id",
-        content = @Content)})
+  @Operation(
+      summary = "Delete one product",
+      description = "Delete one product by id",
+      tags = {"Product Controller"})
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Successfully deleted product",
+            content = {@Content(schema = @Schema(implementation = Product.class))}),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Product is not found with the given id",
+            content = @Content)
+      })
   public ResponseEntity<Product> delete(@PathVariable(value = "id") long id) {
     if (!productService.exists(id)) {
       return ResponseEntity.notFound().build();

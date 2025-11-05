@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2025 Johnny, Inc.
+ * All rights reserved. Patents pending.
+ */
+
 package johnny.gamestore.springboot.property;
 
 import lombok.Getter;
@@ -13,6 +18,5 @@ import javax.validation.constraints.NotBlank;
 @Configuration
 @ConfigurationProperties(prefix = "site.urls")
 public class UrlConfigProperties {
-  @NotBlank
-  private String baseUrl;
+  @NotBlank private String baseUrl;
 }

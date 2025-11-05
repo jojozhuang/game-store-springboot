@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2025 Johnny, Inc.
+ * All rights reserved. Patents pending.
+ */
+
 package johnny.gamestore.springboot.controller;
 
 import johnny.gamestore.springboot.model.ResponseResult;
@@ -28,22 +33,22 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/upload")
 public class UploadController extends BaseController {
-  @Autowired
-  private FileStorageService fileStorageService;
+  @Autowired private FileStorageService fileStorageService;
 
   @Operation(
       summary = "Upload a single file",
       description = "Uploads a single file and returns the file URL.",
       responses = {
-        @ApiResponse(responseCode = "200", description = "File uploaded successfully",
-          content = @Content(schema = @Schema(implementation = ResponseResult.class))),
+        @ApiResponse(
+            responseCode = "200",
+            description = "File uploaded successfully",
+            content = @Content(schema = @Schema(implementation = ResponseResult.class))),
         @ApiResponse(responseCode = "400", description = "Invalid file or upload error")
-      }
-    )
+      })
   @PostMapping("")
   public ResponseEntity<?> uploadFile(
-      @Parameter(description = "File to upload", required = true)
-      @RequestParam("file") MultipartFile uploadfile) {
+      @Parameter(description = "File to upload", required = true) @RequestParam("file")
+          MultipartFile uploadfile) {
     if (uploadfile.isEmpty()) {
       return ResponseEntity.ok().body("please select a file!");
     }
@@ -66,18 +71,19 @@ public class UploadController extends BaseController {
       responses = {
         @ApiResponse(responseCode = "200", description = "Files uploaded successfully"),
         @ApiResponse(responseCode = "400", description = "Upload failed or invalid files")
-      }
-    )
+      })
   @PostMapping("/multi")
   public ResponseEntity<?> uploadFileMulti(
       @Parameter(description = "Extra metadata field", example = "exampleField")
-      @RequestParam("extraField") String extraField,
-      @Parameter(description = "Files to upload", required = true)
-      @RequestParam("files") MultipartFile[] uploadfiles) {
-    String uploadedFileName = Arrays.stream(uploadfiles)
-        .map(MultipartFile::getOriginalFilename)
-        .filter(StringUtils::hasText)
-        .collect(Collectors.joining(","));
+          @RequestParam("extraField")
+          String extraField,
+      @Parameter(description = "Files to upload", required = true) @RequestParam("files")
+          MultipartFile[] uploadfiles) {
+    String uploadedFileName =
+        Arrays.stream(uploadfiles)
+            .map(MultipartFile::getOriginalFilename)
+            .filter(StringUtils::hasText)
+            .collect(Collectors.joining(","));
 
     if (!StringUtils.hasText(uploadedFileName)) {
       return ResponseEntity.ok().body("please select a file!");
@@ -98,12 +104,11 @@ public class UploadController extends BaseController {
       responses = {
         @ApiResponse(responseCode = "200", description = "Files uploaded successfully"),
         @ApiResponse(responseCode = "400", description = "Upload failed or invalid form")
-      }
-  )
+      })
   @PostMapping("/multi/model")
   public ResponseEntity<?> multiUploadFileModel(
-      @Parameter(description = "Upload form model", required = true)
-      @ModelAttribute UploadModel model) {
+      @Parameter(description = "Upload form model", required = true) @ModelAttribute
+          UploadModel model) {
     try {
       saveUploadedFiles(Arrays.asList(model.getFiles()));
     } catch (IOException e) {

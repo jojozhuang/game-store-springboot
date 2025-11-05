@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2025 Johnny, Inc.
+ * All rights reserved. Patents pending.
+ */
+
 package johnny.gamestore.springboot.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -10,12 +15,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(ApiController.class)
 public class ApiControllerTest {
-  @Autowired
-  private MockMvc mockMvc;
+  @Autowired private MockMvc mockMvc;
 
   @Test
   public void testHomeEndpoint() throws Exception {
-    mockMvc.perform(get("/api"))
+    mockMvc
+        .perform(get("/api"))
         .andExpect(status().isOk())
         .andExpect(content().string("Hello! welcome to game store api!"));
   }

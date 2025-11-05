@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2025 Johnny, Inc.
+ * All rights reserved. Patents pending.
+ */
+
 package johnny.gamestore.springboot.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,13 +26,16 @@ class UrlUtilTest {
     var constructor = UrlUtil.class.getDeclaredConstructor();
     constructor.setAccessible(true);
 
-    Exception exception = assertThrows(InvocationTargetException.class, () -> {
-      constructor.newInstance();
-    });
+    Exception exception =
+        assertThrows(
+            InvocationTargetException.class,
+            () -> {
+              constructor.newInstance();
+            });
 
     // Verify the *cause* of the InvocationTargetException
     assertThat(exception.getCause())
-      .isInstanceOf(UnsupportedOperationException.class)
+        .isInstanceOf(UnsupportedOperationException.class)
         .hasMessage("Utility class — instantiation not allowed");
   }
 

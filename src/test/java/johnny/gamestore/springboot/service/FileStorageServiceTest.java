@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2025 Johnny, Inc.
+ * All rights reserved. Patents pending.
+ */
+
 package johnny.gamestore.springboot.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -44,9 +49,9 @@ class FileStorageServiceTest {
   @Test
   void storeFile_Success() throws IOException {
     // Arrange
-    MockMultipartFile file = new MockMultipartFile(
-        "file", "test-image.png", "image/png", "fake image content".getBytes()
-    );
+    MockMultipartFile file =
+        new MockMultipartFile(
+            "file", "test-image.png", "image/png", "fake image content".getBytes());
 
     // Act
     String resultPath = fileStorageService.storeFile(file);
@@ -62,19 +67,19 @@ class FileStorageServiceTest {
 
   @Test
   void storeFile_InvalidExtension_ShouldThrow() {
-    MockMultipartFile file = new MockMultipartFile(
-        "file", "bad-file.txt", "text/plain", "not an image".getBytes()
-    );
+    MockMultipartFile file =
+        new MockMultipartFile("file", "bad-file.txt", "text/plain", "not an image".getBytes());
 
     assertThrows(IllegalArgumentException.class, () -> fileStorageService.storeFile(file));
   }
 
   @Test
   void storeFile_PathTraversal_ShouldThrow() {
-    MockMultipartFile file = new MockMultipartFile(
-        "file", "../evil.png", "image/png", "malicious content".getBytes());
+    MockMultipartFile file =
+        new MockMultipartFile("file", "../evil.png", "image/png", "malicious content".getBytes());
 
-    FileStorageException ex = assertThrows(FileStorageException.class, () -> fileStorageService.storeFile(file));
+    FileStorageException ex =
+        assertThrows(FileStorageException.class, () -> fileStorageService.storeFile(file));
     assertTrue(ex.getMessage().contains("invalid path sequence"));
   }
 
@@ -103,8 +108,9 @@ class FileStorageServiceTest {
 
   @Test
   void loadFileAsResource_NotFound_ShouldThrow() {
-    FileStorageException ex = assertThrows(FileStorageException.class,
-        () -> fileStorageService.loadFileAsResource("missing.png"));
+    FileStorageException ex =
+        assertThrows(
+            FileStorageException.class, () -> fileStorageService.loadFileAsResource("missing.png"));
     assertTrue(ex.getMessage().contains("File not found"));
   }
 }

@@ -4,6 +4,7 @@ plugins {
     id 'java'
     id 'jacoco'
     id 'checkstyle'
+    id 'com.diffplug.spotless' version '6.20.0'
 }
 
 group = 'johnny.tutorial'
@@ -57,6 +58,24 @@ checkstyleMain {
 }
 checkstyleTest {
     source ='src/test/java'
+}
+
+spotless {
+    java {
+        googleJavaFormat('1.17.0')
+        // Add header to each source file. The content is stored in header.txt.
+        // Make sure there are two blank lines at the end of that file.
+        // The file path should match the one configured in checkstyle.xml
+        licenseHeaderFile("${rootDir}/config/checkstyle/header.txt", "package ")
+        importOrder 'lombok', 'johnny', 'io', 'org', 'java', 'javax', ''
+        removeUnusedImports()
+        target 'src/**/*.java'
+        trimTrailingWhitespace()
+        endWithNewline()
+
+        // Remove blank lines between imports
+        replaceRegex 'collapse import blank lines', '(?<=import .+;\n)\n+(?=import )', ''
+    }
 }
 
 jacoco {

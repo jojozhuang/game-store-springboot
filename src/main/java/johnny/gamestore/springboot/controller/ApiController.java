@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2025 Johnny, Inc.
+ * All rights reserved. Patents pending.
+ */
+
 package johnny.gamestore.springboot.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,9 +20,10 @@ public class ApiController {
       summary = "Welcome message",
       description = "Returns a simple greeting message to confirm the API is running.",
       responses = {
-        @ApiResponse(responseCode = "200", description = "API is up and responding with welcome message")
-      }
-  )
+        @ApiResponse(
+            responseCode = "200",
+            description = "API is up and responding with welcome message")
+      })
   @GetMapping("")
   public String home() {
     return "Hello! welcome to game store api!";

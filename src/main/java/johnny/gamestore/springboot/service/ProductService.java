@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2025 Johnny, Inc.
+ * All rights reserved. Patents pending.
+ */
+
 package johnny.gamestore.springboot.service;
 
 import johnny.gamestore.springboot.exception.NotFoundException;
@@ -14,8 +19,7 @@ import java.util.Optional;
 
 @Service
 public class ProductService {
-  @Autowired
-  ProductRepository productRepository;
+  @Autowired ProductRepository productRepository;
 
   public List<Product> findAll() {
     return productRepository.findAll();
@@ -50,7 +54,9 @@ public class ProductService {
   public Page<Product> findAllByPrice(ProductRequest productRequest) {
     return productRepository.findAllByPrice(
         productRequest.getPrice(),
-        PageRequest.of(productRequest.getPage(), productRequest.getSize(),
+        PageRequest.of(
+            productRequest.getPage(),
+            productRequest.getSize(),
             sortByProductIdDesc(productRequest.getSortBy())));
   }
 
