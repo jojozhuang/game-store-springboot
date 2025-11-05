@@ -294,3 +294,30 @@ Start Spring Boot app and visit:
 - Swagger UI: http://localhost:8080/swagger-ui/index.html
 
 ![swagger](./assets/swagger-ui.png)
+
+# Coding Style
+
+### Spotless
+
+`Spotless` is used for code formatting. The `spotless` block in `build.gradle` configures Spotless.
+
+```sh
+# run locally to fix formatting automatically
+./gradlew spotlessApply
+# run in CI Pipeline
+./gradlew spotlessCheck
+```
+
+### Checkstyle
+
+`Checkstyle` is used to analyze Java code for style and quality rule violations. Checkstyle rules are defined in `config/checkstyle/checkstyle.xml`.
+
+```sh
+./gradlew checkstyleMain
+./gradlew checkstyleTest
+```
+
+| Task                 | Applies To        | Files Checked      | Purpose                                         |
+|----------------------|------------------|--------------------|-------------------------------------------------|
+| **checkstyleMain**   | `main` source set | `src/main/java/**` | Ensures **production code** follows style rules |
+| **checkstyleTest**   | `test` source set | `src/test/java/**` | Ensures **test code** follows style rules       |
