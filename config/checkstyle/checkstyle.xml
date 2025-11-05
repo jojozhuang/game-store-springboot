@@ -47,11 +47,9 @@
 
     <module name="SuppressWarningsFilter"/>
 
-    <!--
-    <module name="RegexpHeader">
-        <property name="header"
-                  value="^/\*\*$\n^ \* Copyright \(c\) \d\d\d\d Johnny, Inc\.$\n^ \* All rights reserved\. Patents pending\.$\n^ \*/$"/>
-    </module>-->
+    <module name="Header">
+        <property name="headerFile" value="${config_loc}/header.txt"/>
+    </module>
 
     <module name="RegexpMultiline">
         <property name="message" value="Blank line at start of block should be removed" />
